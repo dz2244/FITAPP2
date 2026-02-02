@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F8FA"
+    android:padding="24dp"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layoutDirection="rtl">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Login"
+            android:textColor="#111827"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <!-- Subtitle -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Welcome back, please log in to your account."
+            android:textColor="#6B7280"
+            android:textSize="16sp" />
+
+        <!-- Email Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="Email address"
+            android:textColor="#111827"
+            android:textSize="16sp" />
+
+        <!-- Email Input -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
+
+            <EditText
+                android:id="@+id/email_input"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="example@email.com"
+                android:background="@android:color/transparent"
+                android:inputType="textEmailAddress"
+                android:textDirection="ltr"
+                android:padding="8dp" />
+
+        </LinearLayout>
+
+        <!-- Password Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="Password"
+            android:textColor="#111827"
+            android:textSize="16sp" />
+
+        <!-- Password Input -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
+
+            <EditText
+                android:id="@+id/password_input"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="••••••••"
+                android:background="@android:color/transparent"
+                android:inputType="textPassword"
+                android:textDirection="rtl"
+                android:padding="8dp" />
+
+        </LinearLayout>
+
+        <!-- Remember Me -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end|center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="Remember me "
+                android:textColor="#111827"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/remember_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Login Button -->
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@android:color/black"
+            android:onClick="Login_click"
+            android:text="Login"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <!-- Corrected: question + register as a separate button centered -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="6dp"
+            android:paddingBottom="10dp">
+
+            <!-- שאלה -->
+            <Button
+                android:id="@+id/register_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:onClick="Sign_up"
+                android:text="Sign up now"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/no_account_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Don't have an account?"
+                android:textColor="#6B7280"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
