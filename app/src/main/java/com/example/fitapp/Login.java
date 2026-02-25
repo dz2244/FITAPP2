@@ -1,7 +1,5 @@
 package com.example.fitapp;
-
 import static com.example.fitapp.FBRef.refAuth;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,17 +10,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-
 public class Login extends AppCompatActivity {
 
     Button loginBtn;
@@ -70,7 +65,7 @@ public class Login extends AppCompatActivity {
                                 }
                                 else
                                 {
-                                    Intent intent = new Intent(Login.this, Qr_Code_main_Screen.class);
+                                    Intent intent = new Intent(Login.this, FragmentsActivity.class);
                                     startActivity(intent);
                                     SharedPreferences settings = getSharedPreferences("RemeberMe", MODE_PRIVATE);
                                     SharedPreferences.Editor editor = settings.edit();
@@ -95,11 +90,9 @@ public class Login extends AppCompatActivity {
                     });
         }
     }
-
-
     public void Sign_up(View view)
     {
-        Intent intent = new Intent(this, SignUp.class);
+        Intent intent = new Intent(this, signUp.class);
         startActivity(intent);
     }
 }

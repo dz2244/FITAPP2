@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,10 +32,9 @@ public class signUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
         eTEmail = findViewById(R.id.emailInput);
         eTPass = findViewById(R.id.passwordInput);
-        tVMsg = findViewById(R.id.tVMsg);
+        tVMsg = findViewById(R.id.msg);
     }
 
     public void createUser(View view) {
@@ -42,7 +42,7 @@ public class signUp extends AppCompatActivity {
         String pass = eTPass.getText().toString();
 
         if (email.isEmpty() || pass.isEmpty()) {
-            tVMsg.setText("Please fill all fields");
+            Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
         } else {
             ProgressDialog pd = new ProgressDialog(this);
             pd.setTitle("Connecting");
@@ -86,4 +86,3 @@ public class signUp extends AppCompatActivity {
         startActivity(intent);
     }
 }
-

@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">FIT APP</string>
+    <string name="title_calorie_tracking">Calorie Tracking</string>
+    <string name="title_sleep_tracking">Sleep Tracking</string>
+    <string name="title_training">Training</string>
+    <string name="title_knowledge">Knowledge</string>
+    <string name="hello_calorie_tracking_fragment">Hello from Calorie Tracking Fragment</string>
+    <string name="hello_sleep_tracking_fragment">Hello from Sleep Tracking Fragment</string>
+    <string name="hello_training_fragment">Hello from Training Fragment</string>
+    <string name="hello_knowledge_fragment">Hello from Knowledge Fragment</string>
 </resources>
