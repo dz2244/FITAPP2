@@ -8,4 +8,8 @@
     <string name="hello_sleep_tracking_fragment">Hello from Sleep Tracking Fragment</string>
     <string name="hello_training_fragment">Hello from Training Fragment</string>
     <string name="hello_knowledge_fragment">Hello from Knowledge Fragment</string>
+    <string name="hello_home_fragment">Hello from Home Fragment</string>
+    <string name="hello_dashboard_fragment">Hello from Dashboard Fragment</string>
+    <string name="hello_notifications_fragment">Hello from Notifications Fragment</string>
+    <string name="hello_profile_fragment">Hello from Profile Fragment</string>
 </resources>

@@ -54,26 +54,32 @@ public class signUp extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             pd.dismiss();
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
 
                             if (task.isSuccessful()) {
                                 Log.i("MainActivity", "createUserWithEmailAndPassword:success");
                                 FirebaseUser user = refAuth.getCurrentUser();
-                                tVMsg.setText("User created successfully\nUid: " + user.getUid());
+                                if (tVMsg != null) {
+                                    tVMsg.setText("User created successfully\nUid: " + user.getUid());
+                                }
                             } else {
                                 Exception exp = task.getException();
-
-                                if (exp instanceof FirebaseAuthInvalidUserException) {
-                                    tVMsg.setText("Invalid email address.");
-                                } else if (exp instanceof FirebaseAuthWeakPasswordException) {
-                                    tVMsg.setText("Password too weak.");
-                                } else if (exp instanceof FirebaseAuthUserCollisionException) {
-                                    tVMsg.setText("User already exists.");
-                                } else if (exp instanceof FirebaseAuthInvalidCredentialsException) {
-                                    tVMsg.setText("General authentication failure.");
-                                } else if (exp instanceof FirebaseNetworkException) {
-                                    tVMsg.setText("Network error. Please check your connection.");
-                                } else {
-                                    tVMsg.setText("An error occurred. Please try again later.");
+                                if (tVMsg != null) {
+                                    if (exp instanceof FirebaseAuthInvalidUserException) {
+                                        tVMsg.setText("Invalid email address.");
+                                    } else if (exp instanceof FirebaseAuthWeakPasswordException) {
+                                        tVMsg.setText("Password too weak.");
+                                    } else if (exp instanceof FirebaseAuthUserCollisionException) {
+                                        tVMsg.setText("User already exists.");
+                                    } else if (exp instanceof FirebaseAuthInvalidCredentialsException) {
+                                        tVMsg.setText("General authentication failure.");
+                                    } else if (exp instanceof FirebaseNetworkException) {
+                                        tVMsg.setText("Network error. Please check your connection.");
+                                    } else {
+                                        tVMsg.setText("An error occurred. Please try again later.");
+                                    }
                                 }
                             }
                         }
