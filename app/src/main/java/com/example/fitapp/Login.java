@@ -18,6 +18,8 @@ import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseUser;
+
 public class Login extends AppCompatActivity {
 
     Button loginBtn;
@@ -94,5 +96,17 @@ public class Login extends AppCompatActivity {
     {
         Intent intent = new Intent(this, signUp.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Boolean isChecked = getSharedPreferences("RemeberMe", MODE_PRIVATE).getBoolean("stayConnect", false);
+        if (refAuth.getCurrentUser() != null && isChecked) {
+            FirebaseUser user = refAuth.getCurrentUser();
+            Intent si = new Intent(this, FragmentsActivity.class);
+            startActivity(si);
+            finish();
+        }
     }
 }

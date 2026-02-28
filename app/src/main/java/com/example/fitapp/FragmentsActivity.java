@@ -28,7 +28,6 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-        // Load the default fragment
         loadFragment(new CalorieTrackingFragment());
     }
 
