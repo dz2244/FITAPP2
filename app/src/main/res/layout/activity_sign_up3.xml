@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F8FA"
+    android:padding="24dp"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layoutDirection="rtl">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="welcome, name"
+            android:textColor="#111827"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <!-- Experience Level -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="רמת ניסיון"
+            android:textColor="#111827"
+            android:textSize="16sp" />
+
+        <RadioGroup
+            android:id="@+id/experienceGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:weightSum="3">
+
+            <RadioButton
+                android:id="@+id/beginnerBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="מתחיל"
+                android:textColor="#111827" />
+
+            <RadioButton
+                android:id="@+id/intermediateBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="בינוני"
+                android:textColor="#111827" />
+
+            <RadioButton
+                android:id="@+id/advancedBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="מתקדם"
+                android:textColor="#111827" />
+        </RadioGroup>
+
+        <!-- Workouts per week -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="אימונים בשבוע"
+            android:textColor="#111827"
+            android:textSize="16sp" />
+
+        <RadioGroup
+            android:id="@+id/workoutsGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:weightSum="3">
+
+            <RadioButton
+                android:id="@+id/oneTwoBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="1-2"
+                android:textColor="#111827" />
+
+            <RadioButton
+                android:id="@+id/threeFourBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="3-4"
+                android:textColor="#111827" />
+
+            <RadioButton
+                android:id="@+id/fivePlusBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="5+"
+                android:textColor="#111827" />
+        </RadioGroup>
+
+        <!-- Goals -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="בחר מטרה"
+            android:textColor="#111827"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:weightSum="3">
+
+            <ImageButton
+                android:id="@+id/fatLossBtn"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@android:color/white"
+                android:src="@drawable/baseline_whatshot_24"
+                android:scaleType="centerInside" />
+
+            <ImageButton
+                android:id="@+id/muscleBtn"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@android:color/white"
+                android:src="@drawable/baseline_fitness_center_24"
+                android:scaleType="centerInside" />
+
+            <ImageButton
+                android:id="@+id/healthBtn"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@android:color/white"
+                android:src="@drawable/baseline_shield_24"
+                android:scaleType="centerInside" />
+        </LinearLayout>
+
+        <!-- Get Started -->
+        <Button
+            android:id="@+id/getStartedBtn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="36dp"
+            android:backgroundTint="@android:color/black"
+            android:onClick="clickedGetStartedBtn"
+            android:text="get started"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</ScrollView>

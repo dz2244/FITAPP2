@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FITAPP">
         <activity
+            android:name=".signUp3"
+            android:exported="false" />
+        <activity
+            android:name=".signUp2"
+            android:exported="false" />
+        <activity
             android:name=".FragmentsActivity"
             android:exported="false" />
         <activity
