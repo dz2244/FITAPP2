@@ -1,5 +1,9 @@
 package com.example.fitapp;
 
+import static com.example.fitapp.FBRef.refAuth;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -53,7 +57,23 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
             fragment = new TrainingFragment();
         } else if (itemId == R.id.navigation_knowledge) {
             fragment = new KnowledgeFragment();
+        } else if (itemId == R.id.navigation_logout) {
+            logout();
+            return true;
         }
         return loadFragment(fragment);
+    }
+
+    private void logout() {
+        refAuth.signOut();
+        SharedPreferences settings = getSharedPreferences("RemeberMe", MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("stayConnect", false);
+        editor.commit();
+
+        Intent intent = new Intent(this, Login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

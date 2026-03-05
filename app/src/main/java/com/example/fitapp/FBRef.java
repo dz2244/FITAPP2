@@ -10,8 +10,14 @@ public class FBRef {
 
     public static FirebaseDatabase FBDB = FirebaseDatabase.getInstance();
     public static DatabaseReference refData = FBDB.getReference("Data");
+    
+    public static DatabaseReference refUsers = FBDB.getReference("Users");
+    public static DatabaseReference refWorkoutPrograms = FBDB.getReference("WorkoutPrograms");
+    public static DatabaseReference refTrainingWeeks = FBDB.getReference("TrainingWeeks");
+    public static DatabaseReference refMealEntries = FBDB.getReference("MealEntries");
+    public static DatabaseReference refSleepSessions = FBDB.getReference("SleepSessions");
+    public static DatabaseReference refContentArticles = FBDB.getReference("ContentArticles");
 
     public static FirebaseStorage FBST = FirebaseStorage.getInstance();
     public static StorageReference refST = FBST.getReference();
 }
-

@@ -60,10 +60,10 @@ public class signUp extends AppCompatActivity {
 
                             if (task.isSuccessful()) {
                                 Log.i("MainActivity", "createUserWithEmailAndPassword:success");
-                                FirebaseUser user = refAuth.getCurrentUser();
-                                if (tVMsg != null) {
-                                    tVMsg.setText("User created successfully\nUid: " + user.getUid());
-                                }
+                                
+                                Intent intent = new Intent(signUp.this, signUp2.class);
+                                startActivity(intent);
+                                finish();
                             } else {
                                 Exception exp = task.getException();
                                 if (tVMsg != null) {

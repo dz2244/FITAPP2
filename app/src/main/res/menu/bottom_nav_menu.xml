@@ -16,4 +16,8 @@
         android:id="@+id/navigation_knowledge"
         android:icon="@android:drawable/ic_menu_myplaces"
         android:title="@string/title_knowledge" />
+    <item
+        android:id="@+id/navigation_logout"
+        android:icon="@android:drawable/ic_lock_power_off"
+        android:title="Logout" />
 </menu>
