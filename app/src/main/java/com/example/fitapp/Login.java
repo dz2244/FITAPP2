@@ -1,112 +1,108 @@
 package com.example.fitapp;
+
 import static com.example.fitapp.FBRef.refAuth;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Activity for user login.
+ * Handles authentication via Firebase and "Remember Me" functionality.
+ */
 public class Login extends AppCompatActivity {
+    /** EditText for email input. */
+    private EditText eTEmail;
+    /** EditText for password input. */
+    private EditText eTPass;
+    /** CheckBox for "Remember Me" option. */
+    private CheckBox cBStay;
 
-    Button loginBtn;
-    EditText emailInput,passwordInput;
-    CheckBox remember_checkbox;
-    Boolean remember_me = false;
-
+    /**
+     * Initializes the activity, sets the content view, and binds the UI components.
+     * Checks if the user should be automatically logged in based on SharedPreferences.
+     * @param savedInstanceState Bundle containing activity state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        loginBtn = findViewById(R.id.loginBtn);
-        emailInput = findViewById(R.id.emailInput);
-        passwordInput = findViewById(R.id.passwordInput);
-        remember_checkbox = findViewById(R.id.checkBox);
+
+        eTEmail = findViewById(R.id.emailInput);
+        eTPass = findViewById(R.id.passwordInput);
+        cBStay = findViewById(R.id.rememberMeCheckbox);
+
+        SharedPreferences settings = getSharedPreferences("RemeberMe", MODE_PRIVATE);
+        boolean stayConnect = settings.getBoolean("stayConnect", false);
+
+        if (stayConnect) {
+            FirebaseUser user = refAuth.getCurrentUser();
+            if (user != null) {
+                Intent si = new Intent(Login.this, FragmentsActivity.class);
+                startActivity(si);
+                finish();
+            }
+        }
     }
 
-    public void Login_click(View view)
-    {
-        String email = emailInput.getText().toString();
-        String pass = passwordInput.getText().toString();
+    /**
+     * Attempts to log in the user with the provided email and password.
+     * If successful, saves login preference and navigates to the main activity.
+     * @param view The clicked view (login button).
+     */
+    public void loginUser(View view) {
+        String email = eTEmail.getText().toString();
+        String pass = eTPass.getText().toString();
+
         if (email.isEmpty() || pass.isEmpty()) {
-            Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
-        } else{
+            Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+        } else {
             ProgressDialog pd = new ProgressDialog(this);
             pd.setTitle("Connecting");
+            pd.setMessage("Logging in...");
             pd.show();
-            pd.setCancelable(false);
 
             refAuth.signInWithEmailAndPassword(email, pass)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Log.d("Auth", "Login success");
-
-                                remember_me = remember_checkbox.isChecked();
-                                if (remember_me) {
-                                    Intent intent = new Intent(Login.this, FragmentsActivity.class);
-                                    startActivity(intent);
-                                    SharedPreferences settings = getSharedPreferences("RemeberMe", MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = settings.edit();
-                                    editor.putBoolean("stayConnect", true);
-                                    editor.commit();
-                                }
-                                else
-                                {
-                                    Intent intent = new Intent(Login.this, FragmentsActivity.class);
-                                    startActivity(intent);
-                                    SharedPreferences settings = getSharedPreferences("RemeberMe", MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = settings.edit();
-                                    editor.putBoolean("stayConnect", false);
-                                    editor.commit();
-                                }
-                                finish();
-
-                            }   else {
-                                Exception e = task.getException();
-                                if (e instanceof FirebaseAuthInvalidUserException)
-                                    Toast.makeText(Login.this, "Invalid info", Toast.LENGTH_SHORT).show();
-                                else if (e instanceof FirebaseAuthInvalidCredentialsException)
-                                    Toast.makeText(Login.this, "Invalid info", Toast.LENGTH_SHORT).show();
-                                else if (e instanceof FirebaseNetworkException)
-                                    Toast.makeText(Login.this, "No internet connection", Toast.LENGTH_SHORT).show();
-                                else
-                                    Toast.makeText(Login.this, "Login failed try again later", Toast.LENGTH_SHORT).show();
-                            }
                             pd.dismiss();
+                            if (task.isSuccessful()) {
+                                SharedPreferences settings = getSharedPreferences("RemeberMe", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putBoolean("stayConnect", cBStay.isChecked());
+                                editor.apply();
+
+                                Intent intent = new Intent(Login.this, FragmentsActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(Login.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
         }
     }
-    public void Sign_up(View view)
-    {
+
+    /**
+     * Navigates the user to the sign-up activity.
+     * @param view The clicked view.
+     */
+    public void goToSignUp(View view) {
         Intent intent = new Intent(this, signUp.class);
         startActivity(intent);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Boolean isChecked = getSharedPreferences("RemeberMe", MODE_PRIVATE).getBoolean("stayConnect", false);
-        if (refAuth.getCurrentUser() != null && isChecked) {
-            FirebaseUser user = refAuth.getCurrentUser();
-            Intent si = new Intent(this, FragmentsActivity.class);
-            startActivity(si);
-            finish();
-        }
     }
 }

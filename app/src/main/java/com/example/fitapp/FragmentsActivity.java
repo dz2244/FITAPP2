@@ -16,8 +16,17 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * Main activity that hosts the fragments of the application.
+ * Manages fragment transactions based on BottomNavigationView selection.
+ */
 public class FragmentsActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
+    /**
+     * Initializes the activity, sets up the window insets, and configures the bottom navigation.
+     * Loads the initial fragment.
+     * @param savedInstanceState Bundle containing activity state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +44,11 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
         loadFragment(new CalorieTrackingFragment());
     }
 
+    /**
+     * Replaces the current fragment in the container with a new one.
+     * @param fragment The fragment to be loaded.
+     * @return true if the fragment was successfully replaced, false otherwise.
+     */
     private boolean loadFragment(Fragment fragment) {
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
@@ -45,6 +59,12 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
         return false;
     }
 
+    /**
+     * Handles navigation item selection from the BottomNavigationView.
+     * Maps menu items to their corresponding fragments or triggers logout.
+     * @param item The selected menu item.
+     * @return true if the item was handled.
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
@@ -64,12 +84,16 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
         return loadFragment(fragment);
     }
 
+    /**
+     * Signs out the user from Firebase, clears "Remember Me" preference,
+     * and redirects to the Login screen.
+     */
     private void logout() {
         refAuth.signOut();
         SharedPreferences settings = getSharedPreferences("RemeberMe", MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("stayConnect", false);
-        editor.commit();
+        editor.apply();
 
         Intent intent = new Intent(this, Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

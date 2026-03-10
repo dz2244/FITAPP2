@@ -2,21 +2,51 @@ package com.example.fitapp;
 
 import java.util.Map;
 
+/**
+ * Represents a user profile in the application.
+ * Stores personal biometrics, preferences, goals, and targets.
+ */
 public class User {
+    /** Unique user identifier from Firebase Auth. */
     private String userId;
+    /** The user's chosen name. */
     private String username;
+    /** The user's age. */
     private int age;
+    /** User's gender (true for male, false for female). */
     private boolean gender;
+    /** User's height in meters. */
     private double height;
+    /** User's weight in kilograms. */
     private double weight;
+    /** Map representing the user's experience level. */
     private Map<String, Integer> experienceLevel;
+    /** Target number of workouts per week. */
     private int workoutsPerWeek;
+    /** Map of the user's fitness goals. */
     private Map<String, Integer> goals;
+    /** Daily target calorie intake. */
     private int dailyTargetCalories;
 
+    /**
+     * Default constructor for Firebase.
+     */
     public User() {
     }
 
+    /**
+     * Constructs a new User profile.
+     * @param userId Unique ID.
+     * @param username Chosen name.
+     * @param age User's age.
+     * @param gender true for male.
+     * @param height Height in meters.
+     * @param weight Weight in kilograms.
+     * @param experienceLevel Level map.
+     * @param workoutsPerWeek Weekly target.
+     * @param goals Fitness goals map.
+     * @param dailyTargetCalories Calorie target.
+     */
     public User(String userId, String username, int age, boolean gender, double height, double weight, Map<String, Integer> experienceLevel, int workoutsPerWeek, Map<String, Integer> goals, int dailyTargetCalories) {
         this.userId = userId;
         this.username = username;
@@ -30,83 +60,53 @@ public class User {
         this.dailyTargetCalories = dailyTargetCalories;
     }
 
-    public String getUserId() {
-        return userId;
-    }
+    /** @return Unique user ID. */
+    public String getUserId() { return userId; }
+    /** @param userId ID to set. */
+    public void setUserId(String userId) { this.userId = userId; }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    /** @return Username. */
+    public String getUsername() { return username; }
+    /** @param username Name to set. */
+    public void setUsername(String username) { this.username = username; }
 
-    public String getUsername() {
-        return username;
-    }
+    /** @return User's age. */
+    public int getAge() { return age; }
+    /** @param age Age to set. */
+    public void setAge(int age) { this.age = age; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    /** @return true if male. */
+    public boolean isGender() { return gender; }
+    /** @param gender Gender boolean to set. */
+    public void setGender(boolean gender) { this.gender = gender; }
 
-    public int getAge() {
-        return age;
-    }
+    /** @return Height in meters. */
+    public double getHeight() { return height; }
+    /** @param height Height to set. */
+    public void setHeight(double height) { this.height = height; }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+    /** @return Weight in kilograms. */
+    public double getWeight() { return weight; }
+    /** @param weight Weight to set. */
+    public void setWeight(double weight) { this.weight = weight; }
 
-    public boolean isGender() {
-        return gender;
-    }
+    /** @return Experience level map. */
+    public Map<String, Integer> getExperienceLevel() { return experienceLevel; }
+    /** @param experienceLevel Map to set. */
+    public void setExperienceLevel(Map<String, Integer> experienceLevel) { this.experienceLevel = experienceLevel; }
 
-    public void setGender(boolean gender) {
-        this.gender = gender;
-    }
+    /** @return Weekly workout target. */
+    public int getWorkoutsPerWeek() { return workoutsPerWeek; }
+    /** @param workoutsPerWeek Target to set. */
+    public void setWorkoutsPerWeek(int workoutsPerWeek) { this.workoutsPerWeek = workoutsPerWeek; }
 
-    public double getHeight() {
-        return height;
-    }
+    /** @return Fitness goals map. */
+    public Map<String, Integer> getGoals() { return goals; }
+    /** @param goals Goals map to set. */
+    public void setGoals(Map<String, Integer> goals) { this.goals = goals; }
 
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public Map<String, Integer> getExperienceLevel() {
-        return experienceLevel;
-    }
-
-    public void setExperienceLevel(Map<String, Integer> experienceLevel) {
-        this.experienceLevel = experienceLevel;
-    }
-
-    public int getWorkoutsPerWeek() {
-        return workoutsPerWeek;
-    }
-
-    public void setWorkoutsPerWeek(int workoutsPerWeek) {
-        this.workoutsPerWeek = workoutsPerWeek;
-    }
-
-    public Map<String, Integer> getGoals() {
-        return goals;
-    }
-
-    public void setGoals(Map<String, Integer> goals) {
-        this.goals = goals;
-    }
-
-    public int getDailyTargetCalories() {
-        return dailyTargetCalories;
-    }
-
-    public void setDailyTargetCalories(int dailyTargetCalories) {
-        this.dailyTargetCalories = dailyTargetCalories;
-    }
+    /** @return Target calories. */
+    public int getDailyTargetCalories() { return dailyTargetCalories; }
+    /** @param dailyTargetCalories Calories to set. */
+    public void setDailyTargetCalories(int dailyTargetCalories) { this.dailyTargetCalories = dailyTargetCalories; }
 }

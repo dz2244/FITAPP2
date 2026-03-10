@@ -22,11 +22,30 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Activity for the third step of user sign-up.
+ * Collects information about experience level, workout frequency, and fitness goals.
+ * Calculates daily target calories and completes the user profile in Firebase.
+ */
 public class signUp3 extends AppCompatActivity {
-    private RadioGroup experienceGroup, workoutsGroup;
+    /** RadioGroup for experience level selection. */
+    private RadioGroup experienceGroup;
+    /** RadioGroup for workouts per week selection. */
+    private RadioGroup workoutsGroup;
+    /** Currently selected fitness goal. */
     private String selectedGoal = "";
-    private ImageButton fatLossBtn, muscleBtn, healthBtn;
+    /** Button for fat loss goal. */
+    private ImageButton fatLossBtn;
+    /** Button for muscle gain goal. */
+    private ImageButton muscleBtn;
+    /** Button for general health goal. */
+    private ImageButton healthBtn;
 
+    /**
+     * Initializes the activity, sets the content view, and binds the UI components.
+     * Sets up click listeners for goal selection buttons.
+     * @param savedInstanceState Bundle containing activity state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +62,11 @@ public class signUp3 extends AppCompatActivity {
         healthBtn.setOnClickListener(v -> selectGoal("General Health", healthBtn));
     }
 
+    /**
+     * Updates the UI to show the selected goal and stores the goal string.
+     * @param goal The selected goal string.
+     * @param selectedBtn The ImageButton that was clicked.
+     */
     private void selectGoal(String goal, ImageButton selectedBtn) {
         selectedGoal = goal;
         fatLossBtn.setBackgroundColor(Color.WHITE);
@@ -51,6 +75,12 @@ public class signUp3 extends AppCompatActivity {
         selectedBtn.setBackgroundColor(Color.LTGRAY);
     }
 
+    /**
+     * Handles the "Get Started" button click.
+     * Validates selections, fetches existing user data, calculates calories,
+     * updates the user profile in Firebase, and navigates to the main activity.
+     * @param view The clicked view.
+     */
     public void clickedGetStartedBtn(View view) {
         int expId = experienceGroup.getCheckedRadioButtonId();
         int workId = workoutsGroup.getCheckedRadioButtonId();
@@ -111,8 +141,13 @@ public class signUp3 extends AppCompatActivity {
         });
     }
 
+    /**
+     * Calculates the Basal Metabolic Rate (BMR) for the user.
+     * @param user The User object containing biometrics.
+     * @return Calculated BMR value.
+     */
     public double calculateBMR(User user) {
-        double heightCm = user.getHeight();
+        double heightCm = user.getHeight() * 100;
         if (user.isGender()) {
             return 88.362 + (13.397 * user.getWeight()) + (4.799 * heightCm) - (5.677 * user.getAge());
         } else {
@@ -120,6 +155,13 @@ public class signUp3 extends AppCompatActivity {
         }
     }
 
+    /**
+     * Calculates the daily target calories based on BMR, activity level, and goals.
+     * @param user The user object.
+     * @param workoutsPerWeek Number of workouts per week.
+     * @param goal The fitness goal.
+     * @return Recommended daily calorie intake.
+     */
     public int calculateCalories(User user, int workoutsPerWeek, String goal) {
         double bmr = calculateBMR(user);
         double activityMultiplier = 1.2 + (workoutsPerWeek * 0.1);

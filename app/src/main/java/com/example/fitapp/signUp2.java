@@ -14,10 +14,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.HashMap;
 
+/**
+ * Activity for the second step of user sign-up.
+ * Collects basic user information like username, age, gender, height, and weight.
+ */
 public class signUp2 extends AppCompatActivity {
-    private EditText usernameInput, ageInput, heightInput, weightInput;
+    /** EditText for username input. */
+    private EditText usernameInput;
+    /** EditText for age input. */
+    private EditText ageInput;
+    /** EditText for height input. */
+    private EditText heightInput;
+    /** EditText for weight input. */
+    private EditText weightInput;
+    /** RadioGroup for gender selection. */
     private RadioGroup genderGroup;
 
+    /**
+     * Initializes the activity, sets the content view, and binds the UI components.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *                           previously being shut down then this Bundle contains the data it most
+     *                           recently supplied in {@link #onSaveInstanceState}. Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +48,11 @@ public class signUp2 extends AppCompatActivity {
         weightInput = findViewById(R.id.weightInput);
     }
 
+    /**
+     * Handles the "Continue" button click. Validates input, creates a User object,
+     * saves it to Firebase Realtime Database, and navigates to the next sign-up step.
+     * @param view The view that was clicked (the continue button).
+     */
     public void clickedContinueBtn(View view) {
         String username = usernameInput.getText().toString();
         String ageStr = ageInput.getText().toString();

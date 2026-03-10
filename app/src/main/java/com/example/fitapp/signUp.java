@@ -24,10 +24,24 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Activity for user sign-up.
+ * Handles the creation of a new Firebase Authentication user account.
+ */
 public class signUp extends AppCompatActivity {
-    private EditText eTEmail, eTPass;
+    /** EditText for email input. */
+    private EditText eTEmail;
+    /** EditText for password input. */
+    private EditText eTPass;
+    /** TextView for displaying messages and error feedback. */
     private TextView tVMsg;
 
+    /**
+     * Initializes the activity, sets the content view, and binds the UI components.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *                           previously being shut down then this Bundle contains the data it most
+     *                           recently supplied in {@link #onSaveInstanceState}. Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +51,11 @@ public class signUp extends AppCompatActivity {
         tVMsg = findViewById(R.id.msg);
     }
 
+    /**
+     * Attempts to create a new user account with the provided email and password.
+     * Uses Firebase Authentication.
+     * @param view The view that was clicked (the sign-up button).
+     */
     public void createUser(View view) {
         String email = eTEmail.getText().toString();
         String pass = eTPass.getText().toString();
@@ -87,6 +106,10 @@ public class signUp extends AppCompatActivity {
         }
     }
 
+    /**
+     * Navigates the user back to the login activity.
+     * @param view The view that was clicked (the go-to-login button).
+     */
     public void goToLogin(View view) {
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
