@@ -5,9 +5,7 @@ import static com.example.fitapp.FBRef.refAuth;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -20,13 +18,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
  * Main activity that hosts the fragments of the application.
  * Manages fragment transactions based on BottomNavigationView selection.
  */
-public class FragmentsActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class FragmentsActivity extends AppCompatActivity {
 
-    /**
-     * Initializes the activity, sets up the window insets, and configures the bottom navigation.
-     * Loads the initial fragment.
-     * @param savedInstanceState Bundle containing activity state.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +32,32 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        
+        // Use the modern OnItemSelectedListener instead of the deprecated one
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            Fragment fragment = null;
+            int itemId = item.getItemId();
+            
+            if (itemId == R.id.navigation_calorie_tracking) {
+                fragment = new CalorieTrackingFragment();
+            } else if (itemId == R.id.navigation_sleep_tracking) {
+                fragment = new SleepTrackingFragment();
+            } else if (itemId == R.id.navigation_training) {
+                fragment = new TrainingFragment();
+            } else if (itemId == R.id.navigation_knowledge) {
+                fragment = new KnowledgeFragment();
+            } else if (itemId == R.id.navigation_logout) {
+                logout();
+                return true;
+            }
 
-        loadFragment(new CalorieTrackingFragment());
+            return loadFragment(fragment);
+        });
+
+        // Load the default fragment only if this is the first time the activity is created
+        if (savedInstanceState == null) {
+            loadFragment(new CalorieTrackingFragment());
+        }
     }
 
     /**
@@ -57,31 +73,6 @@ public class FragmentsActivity extends AppCompatActivity implements BottomNaviga
             return true;
         }
         return false;
-    }
-
-    /**
-     * Handles navigation item selection from the BottomNavigationView.
-     * Maps menu items to their corresponding fragments or triggers logout.
-     * @param item The selected menu item.
-     * @return true if the item was handled.
-     */
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment fragment = null;
-        int itemId = item.getItemId();
-        if (itemId == R.id.navigation_calorie_tracking) {
-            fragment = new CalorieTrackingFragment();
-        } else if (itemId == R.id.navigation_sleep_tracking) {
-            fragment = new SleepTrackingFragment();
-        } else if (itemId == R.id.navigation_training) {
-            fragment = new TrainingFragment();
-        } else if (itemId == R.id.navigation_knowledge) {
-            fragment = new KnowledgeFragment();
-        } else if (itemId == R.id.navigation_logout) {
-            logout();
-            return true;
-        }
-        return loadFragment(fragment);
     }
 
     /**

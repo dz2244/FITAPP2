@@ -113,7 +113,7 @@
                 android:textSize="16sp" />
 
             <CheckBox
-                android:id="@+id/checkBox"
+                android:id="@+id/rememberMeCheckbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -126,7 +126,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="12dp"
             android:backgroundTint="@android:color/black"
-            android:onClick="Login_click"
+            android:onClick="loginUser"
             android:text="Login"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
@@ -148,7 +148,7 @@
                 android:background="@android:color/transparent"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:onClick="Sign_up"
+                android:onClick="goToSignUp"
                 android:text="Sign up now"
                 android:textAllCaps="false"
                 android:textColor="@android:color/black"

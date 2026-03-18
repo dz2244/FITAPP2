@@ -2,10 +2,12 @@ package com.example.fitapp;
 
 import static com.example.fitapp.FBRef.refAuth;
 import static com.example.fitapp.FBRef.refUsers;
+import static com.example.fitapp.FBRef.refWorkoutPrograms;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -15,17 +17,29 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.vertexai.FirebaseVertexAI;
+import com.google.firebase.vertexai.GenerativeModel;
+import com.google.firebase.vertexai.java.GenerativeModelFutures;
+import com.google.firebase.vertexai.type.Content;
+import com.google.firebase.vertexai.type.GenerateContentResponse;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * Activity for the third step of user sign-up.
  * Collects information about experience level, workout frequency, and fitness goals.
  * Calculates daily target calories and completes the user profile in Firebase.
+ * Also generates a personalized workout program using Vertex AI (Gemini).
  */
 public class signUp3 extends AppCompatActivity {
     /** RadioGroup for experience level selection. */
@@ -40,6 +54,8 @@ public class signUp3 extends AppCompatActivity {
     private ImageButton muscleBtn;
     /** Button for general health goal. */
     private ImageButton healthBtn;
+
+    private Executor executor = Executors.newSingleThreadExecutor();
 
     /**
      * Initializes the activity, sets the content view, and binds the UI components.
@@ -78,7 +94,8 @@ public class signUp3 extends AppCompatActivity {
     /**
      * Handles the "Get Started" button click.
      * Validates selections, fetches existing user data, calculates calories,
-     * updates the user profile in Firebase, and navigates to the main activity.
+     * updates the user profile in Firebase, generates an AI workout plan,
+     * and navigates to the main activity.
      * @param view The clicked view.
      */
     public void clickedGetStartedBtn(View view) {
@@ -117,13 +134,18 @@ public class signUp3 extends AppCompatActivity {
                     Map<String, Integer> goalsMap = new HashMap<>();
                     goalsMap.put(selectedGoal, 1);
 
-                    Map<String, Object> updates = new HashMap<>();
-                    updates.put("experienceLevel", experienceMap);
-                    updates.put("workoutsPerWeek", finalWorkoutsPerWeek);
-                    updates.put("goals", goalsMap);
-                    updates.put("dailyTargetCalories", calories);
+                    user.setExperienceLevel(experienceMap);
+                    user.setWorkoutsPerWeek(finalWorkoutsPerWeek);
+                    user.setGoals(goalsMap);
+                    user.setDailyTargetCalories(calories);
 
-                    refUsers.child(userId).updateChildren(updates).addOnCompleteListener(task -> {
+                    // 1. Update User info in Firebase
+                    Task<Void> userUpdateTask = refUsers.child(userId).setValue(user);
+                    
+                    // 2. Generate AI Workout Program
+                    generateAndSaveAIWorkout(user);
+
+                    userUpdateTask.addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Intent intent = new Intent(signUp3.this, FragmentsActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -139,6 +161,74 @@ public class signUp3 extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+    }
+
+    /**
+     * Uses Vertex AI to generate a workout program based on user profile and saves it to Firebase.
+     * @param user The user profile data.
+     */
+    private void generateAndSaveAIWorkout(User user) {
+        GenerativeModel gm = FirebaseVertexAI.getInstance()
+                .generativeModel("gemini-1.5-flash");
+        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+
+        String promptText = String.format(
+                "Generate a concise workout program for a user: " +
+                "Age: %d, Gender: %s, Weight: %.1fkg, Height: %.2fm, Experience: %s, " +
+                "Workouts per week: %d, Goal: %s. " +
+                "Provide a title for the program and a summary of the routine.",
+                user.getAge(), user.isGender() ? "Male" : "Female", user.getWeight(), 
+                user.getHeight(), user.getExperienceLevel().keySet().iterator().next(),
+                user.getWorkoutsPerWeek(), user.getGoals().keySet().iterator().next()
+        );
+
+        Content prompt = new Content.Builder()
+                .addText(promptText)
+                .build();
+
+        ListenableFuture<GenerateContentResponse> response = model.generateContent(prompt);
+        Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+            @Override
+            public void onSuccess(GenerateContentResponse result) {
+                String aiResponse = result.getText();
+                Log.d("VertexAI", "Response: " + aiResponse);
+                saveProgramToFirebase(user.getUserId(), aiResponse, user);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("VertexAI", "Error generating program", t);
+            }
+        }, executor);
+    }
+
+    /**
+     * Parses the AI response and saves the WorkoutProgram to the database.
+     * @param userId The user's ID.
+     * @param aiText The raw text from Vertex AI.
+     * @param user The user object for additional context.
+     */
+    private void saveProgramToFirebase(String userId, String aiText, User user) {
+        String programId = refWorkoutPrograms.push().getKey();
+        
+        Map<String, Integer> levelMap = new HashMap<>();
+        levelMap.put(user.getExperienceLevel().keySet().iterator().next(), 1);
+        
+        Map<String, Integer> daysMap = new HashMap<>();
+        daysMap.put("Weekly", user.getWorkoutsPerWeek());
+
+        WorkoutProgram program = new WorkoutProgram(
+                programId,
+                user.getUsername() + "'s AI Plan",
+                levelMap,
+                daysMap
+        );
+
+        if (programId != null) {
+            refWorkoutPrograms.child(programId).setValue(program);
+            // Link program to user
+            refUsers.child(userId).child("currentProgramId").setValue(programId);
+        }
     }
 
     /**
