@@ -1,4 +1,4 @@
-package com.example.fitapp;
+package com.example.fitapp.classes;
 
 import java.util.Map;
 
@@ -27,6 +27,10 @@ public class User {
     private Map<String, Integer> goals;
     /** Daily target calorie intake. */
     private int dailyTargetCalories;
+    /** The date the user joined (registration date). */
+    private long registrationDate;
+    /** ID of the current workout program. */
+    private String currentProgramId;
 
     /**
      * Default constructor for Firebase.
@@ -36,16 +40,6 @@ public class User {
 
     /**
      * Constructs a new User profile.
-     * @param userId Unique ID.
-     * @param username Chosen name.
-     * @param age User's age.
-     * @param gender true for male.
-     * @param height Height in meters.
-     * @param weight Weight in kilograms.
-     * @param experienceLevel Level map.
-     * @param workoutsPerWeek Weekly target.
-     * @param goals Fitness goals map.
-     * @param dailyTargetCalories Calorie target.
      */
     public User(String userId, String username, int age, boolean gender, double height, double weight, Map<String, Integer> experienceLevel, int workoutsPerWeek, Map<String, Integer> goals, int dailyTargetCalories) {
         this.userId = userId;
@@ -58,6 +52,7 @@ public class User {
         this.workoutsPerWeek = workoutsPerWeek;
         this.goals = goals;
         this.dailyTargetCalories = dailyTargetCalories;
+        this.registrationDate = System.currentTimeMillis();
     }
 
     /** @return Unique user ID. */
@@ -109,4 +104,14 @@ public class User {
     public int getDailyTargetCalories() { return dailyTargetCalories; }
     /** @param dailyTargetCalories Calories to set. */
     public void setDailyTargetCalories(int dailyTargetCalories) { this.dailyTargetCalories = dailyTargetCalories; }
+
+    /** @return Registration date in milliseconds. */
+    public long getRegistrationDate() { return registrationDate; }
+    /** @param registrationDate Date to set. */
+    public void setRegistrationDate(long registrationDate) { this.registrationDate = registrationDate; }
+
+    /** @return Current program ID. */
+    public String getCurrentProgramId() { return currentProgramId; }
+    /** @param currentProgramId ID to set. */
+    public void setCurrentProgramId(String currentProgramId) { this.currentProgramId = currentProgramId; }
 }

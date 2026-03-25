@@ -1,9 +1,11 @@
-package com.example.fitapp;
+package com.example.fitapp.classes;
+
+import java.io.Serializable;
 
 /**
  * Represents a single physical exercise within a workout session.
  */
-public class Exercise {
+public class Exercise implements Serializable {
     /** The name of the exercise (e.g., "Bench Press"). */
     private String exerciseName;
     /** The number of sets to be performed. */

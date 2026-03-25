@@ -1,7 +1,7 @@
-package com.example.fitapp;
+package com.example.fitapp.activities;
 
-import static com.example.fitapp.FBRef.refAuth;
-import static com.example.fitapp.FBRef.refUsers;
+import static com.example.fitapp.classes.FBRef.refAuth;
+import static com.example.fitapp.classes.FBRef.refUsers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.fitapp.R;
+import com.example.fitapp.classes.User;
 
 import java.util.HashMap;
 

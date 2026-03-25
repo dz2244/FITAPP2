@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layoutDirection="rtl">
+        android:layoutDirection="ltr">
 
         <!-- Title -->
         <TextView
@@ -95,7 +95,6 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="@android:color/black"
-                android:onClick="clickedViewFullPlan"
                 android:text="View Full Plan"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
@@ -121,6 +120,7 @@
             android:orientation="horizontal"
             android:weightSum="3">
 
+            <!-- Workouts Count -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="110dp"
@@ -136,7 +136,7 @@
                     android:id="@+id/tvWeeklyWorkoutsValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2/4"
+                    android:text="0/4"
                     android:textColor="#111827"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -152,6 +152,7 @@
                     android:textSize="13sp" />
             </LinearLayout>
 
+            <!-- Calories Remaining -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="110dp"
@@ -165,25 +166,26 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tvStreakValue"
+                    android:id="@+id/tvCaloriesValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3"
+                    android:text="2400"
                     android:textColor="#111827"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvStreakLabel"
+                    android:id="@+id/tvCaloriesLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:gravity="center"
-                    android:text="Active\nweeks"
+                    android:text="Daily\nTarget kcal"
                     android:textColor="#6B7280"
                     android:textSize="13sp" />
             </LinearLayout>
 
+            <!-- Current Weight -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="110dp"
@@ -196,21 +198,21 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tvWeightProgressValue"
+                    android:id="@+id/tvCurrentWeightValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+5kg"
+                    android:text="75kg"
                     android:textColor="#111827"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvWeightProgressLabel"
+                    android:id="@+id/tvCurrentWeightLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:gravity="center"
-                    android:text="Top lift\nprogress"
+                    android:text="Your\nWeight"
                     android:textColor="#6B7280"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -242,7 +244,7 @@
                 android:layout_height="12dp"
                 android:layout_marginTop="12dp"
                 android:max="100"
-                android:progress="50"
+                android:progress="0"
                 android:progressTint="@android:color/black" />
 
             <TextView
@@ -250,7 +252,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="50% completed"
+                android:text="0% completed"
                 android:textColor="#6B7280"
                 android:textSize="14sp" />
         </LinearLayout>

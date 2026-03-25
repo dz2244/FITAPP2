@@ -12,16 +12,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FITAPP">
         <activity
-            android:name=".signUp3"
+            android:name=".activities.FullPlanActivity"
             android:exported="false" />
         <activity
-            android:name=".signUp2"
+            android:name=".activities.WorkoutDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".FragmentsActivity"
+            android:name=".activities.signUp3"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".activities.signUp2"
+            android:exported="false" />
+        <activity
+            android:name=".activities.FragmentsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".signUp"
+            android:name=".activities.signUp"
             android:exported="false" />
     </application>
 

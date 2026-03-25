@@ -1,6 +1,6 @@
-package com.example.fitapp;
+package com.example.fitapp.activities;
 
-import static com.example.fitapp.FBRef.refAuth;
+import static com.example.fitapp.classes.FBRef.refAuth;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.fitapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**

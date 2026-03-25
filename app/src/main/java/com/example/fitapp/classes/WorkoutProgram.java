@@ -1,10 +1,11 @@
-package com.example.fitapp;
+package com.example.fitapp.classes;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
  * Represents a structured workout program.
- * Contains information about the program's level and scheduled training days.
+ * Contains information about the program's level and scheduled training weeks.
  */
 public class WorkoutProgram {
     /** Unique identifier for the program. */
@@ -13,8 +14,8 @@ public class WorkoutProgram {
     private String name;
     /** Map representing the difficulty level of the program. */
     private Map<String, Integer> level;
-    /** Map representing the scheduled training days. */
-    private Map<String, Integer> days;
+    /** List of training weeks in this program. */
+    private ArrayList<TrainingWeek> weeks;
 
     /**
      * Default constructor for Firebase serialization.
@@ -27,13 +28,13 @@ public class WorkoutProgram {
      * @param programId The unique ID of the program.
      * @param name The name of the program.
      * @param level The difficulty level map.
-     * @param days The scheduled days map.
+     * @param weeks The list of training weeks.
      */
-    public WorkoutProgram(String programId, String name, Map<String, Integer> level, Map<String, Integer> days) {
+    public WorkoutProgram(String programId, String name, Map<String, Integer> level, ArrayList<TrainingWeek> weeks) {
         this.programId = programId;
         this.name = name;
         this.level = level;
-        this.days = days;
+        this.weeks = weeks;
     }
 
     /**
@@ -79,16 +80,16 @@ public class WorkoutProgram {
     }
 
     /**
-     * @return The scheduled days map.
+     * @return The list of training weeks.
      */
-    public Map<String, Integer> getDays() {
-        return days;
+    public ArrayList<TrainingWeek> getWeeks() {
+        return weeks;
     }
 
     /**
-     * @param days The scheduled days map to set.
+     * @param weeks The list of training weeks to set.
      */
-    public void setDays(Map<String, Integer> days) {
-        this.days = days;
+    public void setWeeks(ArrayList<TrainingWeek> weeks) {
+        this.weeks = weeks;
     }
 }
