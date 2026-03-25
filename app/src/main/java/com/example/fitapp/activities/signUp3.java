@@ -300,7 +300,7 @@ public class signUp3 extends AppCompatActivity {
         ArrayList<Exercise> l = new ArrayList<>();
         l.add(new Exercise("Incline DB Press", 3, 10, 90));
         l.add(new Exercise("Pull Ups", 3, 8, 90));
-        l.add(new Exercise("Lateral Raises", 3, 15, 60));
+        l.add(new Exercise("Lateral Raises", 3, 12, 60));
         l.add(new Exercise("Seated Rows", 3, 12, 60));
         l.add(new Exercise("Tricep Pushdowns", 3, 12, 45));
         return l;

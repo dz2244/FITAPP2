@@ -11,7 +11,18 @@ import androidx.fragment.app.Fragment;
 
 import com.example.fitapp.R;
 
+/**
+ * Fragment dedicated to tracking user sleep patterns.
+ * Allows users to log sleep duration and quality to monitor recovery.
+ */
 public class SleepTrackingFragment extends Fragment {
+
+    /**
+     * Default constructor for SleepTrackingFragment.
+     */
+    public SleepTrackingFragment() {
+        // Required empty public constructor
+    }
 
     @Nullable
     @Override

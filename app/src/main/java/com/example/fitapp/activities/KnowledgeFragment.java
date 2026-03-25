@@ -11,7 +11,18 @@ import androidx.fragment.app.Fragment;
 
 import com.example.fitapp.R;
 
+/**
+ * Fragment that provides users with educational content and articles.
+ * Helps users gain knowledge about fitness, nutrition, and wellness.
+ */
 public class KnowledgeFragment extends Fragment {
+
+    /**
+     * Default constructor for KnowledgeFragment.
+     */
+    public KnowledgeFragment() {
+        // Required empty public constructor
+    }
 
     @Nullable
     @Override

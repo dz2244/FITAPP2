@@ -34,24 +34,40 @@ import java.util.List;
 /**
  * Fragment for training management.
  * Displays a list of workouts pulled from Firebase based on the current week.
+ * Allows users to track their progress and view workout details.
  */
 public class TrainingFragment extends Fragment {
 
+    /** RecyclerView to display the list of workouts for the current week. */
     private RecyclerView recyclerWorkouts;
+    /** ProgressBar showing the weekly workout completion percentage. */
     private ProgressBar progressWeekly;
+    /** TextView displaying the count of completed workouts over the total for the week. */
     private TextView tvWeeklyWorkoutsValue;
+    /** TextView displaying the completion percentage text. */
     private TextView tvCompletionPercent;
+    /** TextViews for displaying workout plan details. */
     private TextView tvPlanName, tvPlanGoal, tvPlanFrequency, tvPlanDuration;
+    /** TextView displaying the current training week title. */
     private TextView tvTrainingTitle;
+    /** TextViews for user's biometric targets and status. */
     private TextView tvCaloriesValue, tvCurrentWeightValue;
 
+    /** List of workout items currently displayed in the RecyclerView. */
     private final List<WorkoutItem> workoutList = new ArrayList<>();
+    /** Adapter for the workouts RecyclerView. */
     private WorkoutAdapter workoutAdapter;
 
+    /** Current user data retrieved from Firebase. */
     private User currentUserData;
+    /** Current workout program assigned to the user. */
     private WorkoutProgram currentProgram;
+    /** The index of the current week calculated from the registration date. */
     private int currentWeekIndex = 0;
 
+    /**
+     * Required empty public constructor for Fragment instantiation.
+     */
     public TrainingFragment() {
         // Required empty public constructor
     }
@@ -73,6 +89,10 @@ public class TrainingFragment extends Fragment {
         fetchUserData();
     }
 
+    /**
+     * Binds UI components from the layout.
+     * @param view The root view of the fragment.
+     */
     private void initViews(View view) {
         recyclerWorkouts = view.findViewById(R.id.recyclerWorkouts);
         progressWeekly = view.findViewById(R.id.progressWeekly);
@@ -89,6 +109,9 @@ public class TrainingFragment extends Fragment {
         tvCurrentWeightValue = view.findViewById(R.id.tvCurrentWeightValue);
     }
 
+    /**
+     * Fetches current user data from Firebase and starts the UI update process.
+     */
     private void fetchUserData() {
         FirebaseUser firebaseUser = FBRef.refAuth.getCurrentUser();
         if (firebaseUser != null) {
@@ -113,6 +136,9 @@ public class TrainingFragment extends Fragment {
         }
     }
 
+    /**
+     * Calculates the current week number based on the user's registration date.
+     */
     private void calculateCurrentWeek() {
         if (currentUserData.getRegistrationDate() == 0) {
             currentWeekIndex = 0;
@@ -131,6 +157,10 @@ public class TrainingFragment extends Fragment {
         }
     }
 
+    /**
+     * Fetches the details of the workout program from Firebase.
+     * @param programId The ID of the workout program to fetch.
+     */
     private void fetchWorkoutProgram(String programId) {
         if (programId == null || programId.isEmpty()) return;
 
@@ -149,6 +179,10 @@ public class TrainingFragment extends Fragment {
         });
     }
 
+    /**
+     * Loads the workouts for the current week into the local list and updates the adapter.
+     * @param week The TrainingWeek object containing the workouts.
+     */
     private void loadWorkoutsFromWeek(TrainingWeek week) {
         workoutList.clear();
         if (week.getTrainingDays() != null) {
@@ -166,6 +200,10 @@ public class TrainingFragment extends Fragment {
         updateProgressUI();
     }
 
+    /**
+     * Updates the UI with user-specific profile information.
+     * @param user The user object containing the data to display.
+     */
     private void updateProfileUI(User user) {
         if (tvPlanName != null) tvPlanName.setText(user.getUsername() + "'s Plan");
         if (tvPlanGoal != null && user.getGoals() != null) {
@@ -183,6 +221,9 @@ public class TrainingFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets up the RecyclerView with its adapter and layout manager.
+     */
     private void setupRecyclerView() {
         recyclerWorkouts.setLayoutManager(new LinearLayoutManager(requireContext()));
         workoutAdapter = new WorkoutAdapter(workoutList, new WorkoutActionListener() {
@@ -203,6 +244,10 @@ public class TrainingFragment extends Fragment {
         recyclerWorkouts.setAdapter(workoutAdapter);
     }
 
+    /**
+     * Toggles the completion state of a workout and updates Firebase.
+     * @param position The position of the workout in the list.
+     */
     private void toggleWorkoutCompletion(int position) {
         WorkoutItem item = workoutList.get(position);
         boolean newState = !item.isCompleted();
@@ -229,12 +274,19 @@ public class TrainingFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets up click listeners for fragment buttons.
+     * @param view The root view of the fragment.
+     */
     private void setupButtons(View view) {
         view.findViewById(R.id.btnViewFullPlan).setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), FullPlanActivity.class));
         });
     }
 
+    /**
+     * Updates the weekly progress bars and text views based on completed workouts.
+     */
     private void updateProgressUI() {
         int completedCount = 0;
         for (WorkoutItem item : workoutList) if (item.isCompleted()) completedCount++;
@@ -246,12 +298,22 @@ public class TrainingFragment extends Fragment {
         tvCompletionPercent.setText(percent + "% completed");
     }
 
+    /**
+     * Internal data class representing a single workout item for display.
+     */
     public static class WorkoutItem {
         private String name;
         private String details;
         private boolean completed;
         private List<Exercise> exercises;
 
+        /**
+         * Constructs a new WorkoutItem.
+         * @param name Name of the workout.
+         * @param details Details string (time and exercise count).
+         * @param completed Whether it is finished.
+         * @param exercises List of associated exercises.
+         */
         public WorkoutItem(String name, String details, boolean completed, List<Exercise> exercises) {
             this.name = name;
             this.details = details;
@@ -266,15 +328,36 @@ public class TrainingFragment extends Fragment {
         public List<Exercise> getExercises() { return exercises; }
     }
 
+    /**
+     * Interface for handling interactions with workout items in the list.
+     */
     interface WorkoutActionListener {
+        /**
+         * Triggered when the "Mark Done" button is clicked.
+         * @param position The position of the item in the list.
+         */
         void onMarkDoneClicked(int position);
+        /**
+         * Triggered when the "View" button is clicked.
+         * @param position The position of the item in the list.
+         */
         void onViewClicked(int position);
     }
 
+    /**
+     * Adapter for the workouts RecyclerView.
+     */
     public static class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder> {
+        /** The list of workout items to display. */
         private final List<WorkoutItem> items;
+        /** Listener for action callbacks. */
         private final WorkoutActionListener listener;
 
+        /**
+         * Constructs a new WorkoutAdapter.
+         * @param items The list of workout items.
+         * @param listener The listener for click events.
+         */
         public WorkoutAdapter(List<WorkoutItem> items, WorkoutActionListener listener) {
             this.items = items;
             this.listener = listener;
@@ -308,10 +391,19 @@ public class TrainingFragment extends Fragment {
         @Override
         public int getItemCount() { return items.size(); }
 
+        /**
+         * ViewHolder class for individual workout cards.
+         */
         static class WorkoutViewHolder extends RecyclerView.ViewHolder {
+            /** TextViews for workout information. */
             TextView tvWorkoutName, tvWorkoutDetails, tvWorkoutStatus;
+            /** Buttons for viewing details and marking completion. */
             Button btnViewWorkout, btnMarkDone;
 
+            /**
+             * Constructs a new WorkoutViewHolder.
+             * @param itemView The view of the workout card.
+             */
             public WorkoutViewHolder(@NonNull View itemView) {
                 super(itemView);
                 tvWorkoutName = itemView.findViewById(R.id.tvWorkoutName);

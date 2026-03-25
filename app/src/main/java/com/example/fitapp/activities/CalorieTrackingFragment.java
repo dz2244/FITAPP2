@@ -11,7 +11,18 @@ import androidx.fragment.app.Fragment;
 
 import com.example.fitapp.R;
 
+/**
+ * Fragment responsible for tracking the user's daily calorie intake.
+ * Users can log meals and view their progress towards their daily calorie target.
+ */
 public class CalorieTrackingFragment extends Fragment {
+
+    /**
+     * Default constructor for CalorieTrackingFragment.
+     */
+    public CalorieTrackingFragment() {
+        // Required empty public constructor
+    }
 
     @Nullable
     @Override

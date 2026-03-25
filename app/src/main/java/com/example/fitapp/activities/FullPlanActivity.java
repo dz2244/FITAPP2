@@ -26,13 +26,26 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity that displays the full training plan for the user.
+ * It shows a list of training weeks and their completion progress.
+ */
 public class FullPlanActivity extends AppCompatActivity {
 
+    /** TextView for the title of the full plan. */
     private TextView tvFullPlanTitle;
+    /** RecyclerView to display the list of training weeks. */
     private RecyclerView recyclerWeeks;
+    /** Adapter for the training weeks RecyclerView. */
     private WeekAdapter adapter;
+    /** List of training weeks to be displayed. */
     private List<TrainingWeek> weekList = new ArrayList<>();
 
+    /**
+     * Initializes the activity, sets the content view, and binds UI components.
+     * Starts fetching the user's workout program.
+     * @param savedInstanceState Bundle containing activity state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +62,9 @@ public class FullPlanActivity extends AppCompatActivity {
         fetchUserProgram();
     }
 
+    /**
+     * Fetches the current user's profile from Firebase to retrieve their current program ID.
+     */
     private void fetchUserProgram() {
         FirebaseUser firebaseUser = FBRef.refAuth.getCurrentUser();
         if (firebaseUser != null) {
@@ -71,6 +87,10 @@ public class FullPlanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Loads the specific workout program details from Firebase using the program ID.
+     * @param programId The ID of the workout program to load.
+     */
     private void loadProgram(String programId) {
         FBRef.refWorkoutPrograms.child(programId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -88,9 +108,17 @@ public class FullPlanActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * RecyclerView Adapter for displaying individual training weeks.
+     */
     private static class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.WeekViewHolder> {
+        /** The list of training weeks. */
         private List<TrainingWeek> weeks;
 
+        /**
+         * Constructor for WeekAdapter.
+         * @param weeks The list of training weeks to display.
+         */
         WeekAdapter(List<TrainingWeek> weeks) {
             this.weeks = weeks;
         }
@@ -124,10 +152,21 @@ public class FullPlanActivity extends AppCompatActivity {
             return weeks.size();
         }
 
+        /**
+         * ViewHolder for a training week item.
+         */
         static class WeekViewHolder extends RecyclerView.ViewHolder {
-            TextView tvWeekNumber, tvWeekStatus;
+            /** TextView for the week number. */
+            TextView tvWeekNumber;
+            /** TextView for the workout completion status. */
+            TextView tvWeekStatus;
+            /** ProgressBar for the weekly progress. */
             ProgressBar pbWeekProgress;
 
+            /**
+             * Constructor for WeekViewHolder.
+             * @param itemView The view of the week item.
+             */
             WeekViewHolder(View itemView) {
                 super(itemView);
                 tvWeekNumber = itemView.findViewById(R.id.tvWeekNumber);
