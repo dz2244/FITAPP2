@@ -23,4 +23,10 @@
     <string name="label_carbs">Carbs (g)</string>
     <string name="label_fats">Fats (g)</string>
     <string name="btn_add_meal">Add Meal</string>
+
+    <!-- Knowledge Fragment -->
+    <string name="knowledge_base_title">Fitness Knowledge Base</string>
+    <string name="watch_video">Watch Video</string>
+    <string name="read_more">Read More</string>
+    <string name="article_detail_not_implemented">Full article view not implemented, opening video if available.</string>
 </resources>
