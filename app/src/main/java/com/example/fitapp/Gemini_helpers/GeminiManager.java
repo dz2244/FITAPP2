@@ -12,6 +12,7 @@ import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.GenerateContentResponse;
 import com.google.ai.client.generativeai.type.ImagePart;
 import com.google.ai.client.generativeai.type.Part;
+import com.google.ai.client.generativeai.type.RequestOptions;
 import com.google.ai.client.generativeai.type.TextPart;
 
 import java.util.ArrayList;
@@ -37,9 +38,22 @@ public class GeminiManager {
      * Initializes the {@link GenerativeModel} with the specified model name and API key.
      */
     private GeminiManager() {
+        String apiKey = BuildConfig.Gemini_API_Key;
+        if (apiKey == null || apiKey.isEmpty() || apiKey.equals("YOUR_API_KEY")) {
+            Log.e(TAG, "Gemini API Key is missing or invalid! Check local.properties");
+        }
+        
+        // Use gemini-1.5-flash as the stable model for multimodal tasks.
+        // Explicitly setting the API version to "v1" instead of "v1beta" to avoid 404 errors 
+        // if v1beta is not supported for the specific model/region combination.
+        RequestOptions requestOptions = new RequestOptions(null, "v1");
+        
         gemini = new GenerativeModel(
                 "gemini-2.5-flash",
-                BuildConfig.Gemini_API_Key
+                apiKey,
+                null, // generationConfig
+                null, // safetySettings
+                requestOptions
         );
     }
 
@@ -62,24 +76,28 @@ public class GeminiManager {
      * @param callback The callback to receive the response or error.
      */
     public void sendTextPrompt(String prompt, GeminiCallback callback) {
-        gemini.generateContent(prompt,
-                new Continuation<GenerateContentResponse>() {
-                    @NonNull
-                    @Override
-                    public CoroutineContext getContext() {
-                        return EmptyCoroutineContext.INSTANCE;
-                    }
-
-                    @Override
-                    public void resumeWith(@NonNull Object result) {
-                        if (result instanceof Result.Failure) {
-                            Log.i(TAG, "Error: " + ((Result.Failure) result).exception.getMessage());
-                            callback.onFailure(((Result.Failure) result).exception);
-                        } else {
-                            callback.onSuccess(((GenerateContentResponse) result).getText());
+        try {
+            gemini.generateContent(prompt,
+                    new Continuation<GenerateContentResponse>() {
+                        @NonNull
+                        @Override
+                        public CoroutineContext getContext() {
+                            return EmptyCoroutineContext.INSTANCE;
                         }
-                    }
-                });
+
+                        @Override
+                        public void resumeWith(@NonNull Object result) {
+                            try {
+                                handleResponse(result, callback);
+                            } catch (Exception e) {
+                                Log.e(TAG, "Crash during response handling", e);
+                                callback.onFailure(e);
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
     }
 
     /**
@@ -90,31 +108,35 @@ public class GeminiManager {
      * @param callback The callback to receive the response or error.
      */
     public void sendTextWithPhotoPrompt(String prompt, Bitmap photo, GeminiCallback callback) {
-        List<Part> parts = new ArrayList<>();
-        parts.add(new TextPart(prompt));
-        parts.add(new ImagePart(photo));
+        try {
+            List<Part> parts = new ArrayList<>();
+            parts.add(new TextPart(prompt));
+            parts.add(new ImagePart(photo));
 
-        Content[] content = new Content[1];
-        content[0] = new Content(parts);
+            Content[] content = new Content[1];
+            content[0] = new Content(parts);
 
-        gemini.generateContent(content,
-                new Continuation<GenerateContentResponse>() {
-                    @NonNull
-                    @Override
-                    public CoroutineContext getContext() {
-                        return EmptyCoroutineContext.INSTANCE;
-                    }
-
-                    @Override
-                    public void resumeWith(@NonNull Object result) {
-                        if (result instanceof Result.Failure) {
-                            Log.i(TAG, "Error: " + ((Result.Failure) result).exception.getMessage());
-                            callback.onFailure(((Result.Failure) result).exception);
-                        } else {
-                            callback.onSuccess(((GenerateContentResponse) result).getText());
+            gemini.generateContent(content,
+                    new Continuation<GenerateContentResponse>() {
+                        @NonNull
+                        @Override
+                        public CoroutineContext getContext() {
+                            return EmptyCoroutineContext.INSTANCE;
                         }
-                    }
-                });
+
+                        @Override
+                        public void resumeWith(@NonNull Object result) {
+                            try {
+                                handleResponse(result, callback);
+                            } catch (Exception e) {
+                                Log.e(TAG, "Crash during response handling", e);
+                                callback.onFailure(e);
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
     }
 
     /**
@@ -125,33 +147,60 @@ public class GeminiManager {
      * @param callback  The callback to receive the response or error.
      */
     public void sendTextWithPhotosPrompt(String prompt, ArrayList<Bitmap> photos, GeminiCallback callback) {
-        List<Part> parts = new ArrayList<>();
-        parts.add(new TextPart(prompt));
-        for (Bitmap photo : photos) {
-            parts.add(new ImagePart(photo));
-        }
+        try {
+            List<Part> parts = new ArrayList<>();
+            parts.add(new TextPart(prompt));
+            for (Bitmap photo : photos) {
+                parts.add(new ImagePart(photo));
+            }
 
-        Content[] content = new Content[1];
-        content[0] = new Content(parts);
+            Content[] content = new Content[1];
+            content[0] = new Content(parts);
 
-        gemini.generateContent(content,
-                new Continuation<GenerateContentResponse>() {
-                    @NonNull
-                    @Override
-                    public CoroutineContext getContext() {
-                        return EmptyCoroutineContext.INSTANCE;
-                    }
-
-                    @Override
-                    public void resumeWith(@NonNull Object result) {
-                        if (result instanceof Result.Failure) {
-                            Log.i(TAG, "Error: " + ((Result.Failure) result).exception.getMessage());
-                            callback.onFailure(((Result.Failure) result).exception);
-                        } else {
-                            callback.onSuccess(((GenerateContentResponse) result).getText());
+            gemini.generateContent(content,
+                    new Continuation<GenerateContentResponse>() {
+                        @NonNull
+                        @Override
+                        public CoroutineContext getContext() {
+                            return EmptyCoroutineContext.INSTANCE;
                         }
-                    }
-                });
+
+                        @Override
+                        public void resumeWith(@NonNull Object result) {
+                            try {
+                                handleResponse(result, callback);
+                            } catch (Exception e) {
+                                Log.e(TAG, "Crash during response handling", e);
+                                callback.onFailure(e);
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
+    }
+
+    /**
+     * Helper method to handle the response from the Gemini model.
+     *
+     * @param result   The result from the model.
+     * @param callback The callback to receive the response or error.
+     */
+    private void handleResponse(Object result, GeminiCallback callback) {
+        if (result instanceof Result.Failure) {
+            Throwable exception = ((Result.Failure) result).exception;
+            Log.e(TAG, "Gemini Error: " + exception.getMessage());
+            callback.onFailure(exception);
+        } else if (result instanceof GenerateContentResponse) {
+            String text = ((GenerateContentResponse) result).getText();
+            if (text != null) {
+                callback.onSuccess(text);
+            } else {
+                callback.onFailure(new Exception("Response text is null. The request might have been blocked (safety filters) or no content was generated."));
+            }
+        } else {
+            callback.onFailure(new Exception("Unexpected response type from Gemini SDK."));
+        }
     }
 
     /**
@@ -163,31 +212,35 @@ public class GeminiManager {
      * @param callback  The callback to receive the response or error.
      */
     public void sendTextWithFilePrompt(String prompt, byte[] bytes, String mimeType, GeminiCallback callback) {
-        List<Part> parts = new ArrayList<>();
-        parts.add(new TextPart(prompt));
-        parts.add(new BlobPart(mimeType, bytes));
+        try {
+            List<Part> parts = new ArrayList<>();
+            parts.add(new TextPart(prompt));
+            parts.add(new BlobPart(mimeType, bytes));
 
-        Content[] content = new Content[1];
-        content[0] = new Content(parts);
+            Content[] content = new Content[1];
+            content[0] = new Content(parts);
 
-        gemini.generateContent(content,
-                new Continuation<GenerateContentResponse>() {
-                    @NonNull
-                    @Override
-                    public CoroutineContext getContext() {
-                        return EmptyCoroutineContext.INSTANCE;
-                    }
-
-                    @Override
-                    public void resumeWith(@NonNull Object result) {
-                        if (result instanceof Result.Failure) {
-                            Log.i(TAG, "Error: " + ((Result.Failure) result).exception.getMessage());
-                            callback.onFailure(((Result.Failure) result).exception);
-                        } else {
-                            callback.onSuccess(((GenerateContentResponse) result).getText());
+            gemini.generateContent(content,
+                    new Continuation<GenerateContentResponse>() {
+                        @NonNull
+                        @Override
+                        public CoroutineContext getContext() {
+                            return EmptyCoroutineContext.INSTANCE;
                         }
-                    }
-                });
+
+                        @Override
+                        public void resumeWith(@NonNull Object result) {
+                            try {
+                                handleResponse(result, callback);
+                            } catch (Exception e) {
+                                Log.e(TAG, "Crash during response handling", e);
+                                callback.onFailure(e);
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
     }
 
     /**
@@ -199,32 +252,36 @@ public class GeminiManager {
      * @param callback   The callback to receive the response or error.
      */
     public void sendTextWithFilesPrompt(String prompt, ArrayList<byte[]> filesBytes, ArrayList<String> mimeTypes, GeminiCallback callback) {
-        List<Part> parts = new ArrayList<>();
-        parts.add(new TextPart(prompt));
-        for (int i = 0; i < filesBytes.size(); i++) {
-            parts.add(new BlobPart(mimeTypes.get(i), filesBytes.get(i)));
-        }
+        try {
+            List<Part> parts = new ArrayList<>();
+            parts.add(new TextPart(prompt));
+            for (int i = 0; i < filesBytes.size(); i++) {
+                parts.add(new BlobPart(mimeTypes.get(i), filesBytes.get(i)));
+            }
 
-        Content[] content = new Content[1];
-        content[0] = new Content(parts);
+            Content[] content = new Content[1];
+            content[0] = new Content(parts);
 
-        gemini.generateContent(content,
-                new Continuation<GenerateContentResponse>() {
-                    @NonNull
-                    @Override
-                    public CoroutineContext getContext() {
-                        return EmptyCoroutineContext.INSTANCE;
-                    }
-
-                    @Override
-                    public void resumeWith(@NonNull Object result) {
-                        if (result instanceof Result.Failure) {
-                            Log.i(TAG, "Error: " + ((Result.Failure) result).exception.getMessage());
-                            callback.onFailure(((Result.Failure) result).exception);
-                        } else {
-                            callback.onSuccess(((GenerateContentResponse) result).getText());
+            gemini.generateContent(content,
+                    new Continuation<GenerateContentResponse>() {
+                        @NonNull
+                        @Override
+                        public CoroutineContext getContext() {
+                            return EmptyCoroutineContext.INSTANCE;
                         }
-                    }
-                });
+
+                        @Override
+                        public void resumeWith(@NonNull Object result) {
+                            try {
+                                handleResponse(result, callback);
+                            } catch (Exception e) {
+                                Log.e(TAG, "Crash during response handling", e);
+                                callback.onFailure(e);
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            callback.onFailure(e);
+        }
     }
 }

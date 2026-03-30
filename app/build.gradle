@@ -23,7 +23,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "Gemini_API_Key", "\"${localProperties.getProperty('api.key', '')}\""
+        
+        // Use Gemini_API_Key if api.key is not found, to match user's local.properties
+        def geminiKey = localProperties.getProperty('api.key') ?: localProperties.getProperty('Gemini_API_Key', '')
+        buildConfigField "String", "Gemini_API_Key", "\"${geminiKey}\""
     }
 
     buildTypes {
