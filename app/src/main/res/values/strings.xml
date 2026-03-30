@@ -12,4 +12,15 @@
     <string name="hello_dashboard_fragment">Hello from Dashboard Fragment</string>
     <string name="hello_notifications_fragment">Hello from Notifications Fragment</string>
     <string name="hello_profile_fragment">Hello from Profile Fragment</string>
+
+    <!-- Calorie Tracking Fragment -->
+    <string name="subtitle_calorie_tracking">Log your meals and track your daily intake.</string>
+    <string name="label_food_name">Food Name</string>
+    <string name="hint_food_name">e.g. Chicken Breast</string>
+    <string name="label_calories">Calories (kcal)</string>
+    <string name="hint_zero">0</string>
+    <string name="label_protein">Protein (g)</string>
+    <string name="label_carbs">Carbs (g)</string>
+    <string name="label_fats">Fats (g)</string>
+    <string name="btn_add_meal">Add Meal</string>
 </resources>

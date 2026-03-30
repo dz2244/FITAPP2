@@ -1,13 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CalorieTrackingFragment">
+    android:background="#F7F8FA"
+    android:padding="24dp"
+    android:fillViewport="true">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_calorie_tracking_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layoutDirection="rtl">
 
-</FrameLayout>
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/title_calorie_tracking"
+            android:textColor="#111827"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <!-- Subtitle -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/subtitle_calorie_tracking"
+            android:textColor="#6B7280"
+            android:textSize="16sp" />
+
+        <!-- Food Name Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="@string/label_food_name"
+            android:textColor="#111827"
+            android:textSize="16sp" />
+
+        <!-- Food Name Input -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="@android:color/white">
+
+            <EditText
+                android:id="@+id/foodNameInput"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="@string/hint_food_name"
+                android:background="@android:color/transparent"
+                android:inputType="text"
+                android:textDirection="ltr"
+                android:padding="8dp"
+                android:importantForAutofill="no" />
+
+        </LinearLayout>
+
+        <!-- Calories Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="@string/label_calories"
+            android:textColor="#111827"
+            android:textSize="16sp" />
+
+        <!-- Calories Input -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="@android:color/white">
+
+            <EditText
+                android:id="@+id/caloriesInput"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="@string/hint_zero"
+                android:background="@android:color/transparent"
+                android:inputType="number"
+                android:textDirection="ltr"
+                android:padding="8dp"
+                android:importantForAutofill="no" />
+
+        </LinearLayout>
+
+        <!-- Protein Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="@string/label_protein"
+            android:textColor="#111827"
+            android:textSize="16sp" />
+
+        <!-- Protein Input -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="@android:color/white">
+
+            <EditText
+                android:id="@+id/proteinInput"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="@string/hint_zero"
+                android:background="@android:color/transparent"
+                android:inputType="numberDecimal"
+                android:textDirection="ltr"
+                android:padding="8dp"
+                android:importantForAutofill="no" />
+
+        </LinearLayout>
+
+        <!-- Carbs Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="@string/label_carbs"
+            android:textColor="#111827"
+            android:textSize="16sp" />
+
+        <!-- Carbs Input -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="@android:color/white">
+
+            <EditText
+                android:id="@+id/carbsInput"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="@string/hint_zero"
+                android:background="@android:color/transparent"
+                android:inputType="numberDecimal"
+                android:textDirection="ltr"
+                android:padding="8dp"
+                android:importantForAutofill="no" />
+
+        </LinearLayout>
+
+        <!-- Fats Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="@string/label_fats"
+            android:textColor="#111827"
+            android:textSize="16sp" />
+
+        <!-- Fats Input -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="@android:color/white">
+
+            <EditText
+                android:id="@+id/fatsInput"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="@string/hint_zero"
+                android:background="@android:color/transparent"
+                android:inputType="numberDecimal"
+                android:textDirection="ltr"
+                android:padding="8dp"
+                android:importantForAutofill="no" />
+
+        </LinearLayout>
+
+        <!-- Add Meal Button -->
+        <Button
+            android:id="@+id/addMealBtn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@android:color/black"
+            android:text="@string/btn_add_meal"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</ScrollView>
