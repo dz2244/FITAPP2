@@ -1,8 +1,6 @@
 package com.example.fitapp.Gemini_helpers;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-
 import com.example.fitapp.BuildConfig;
 import com.google.ai.client.generativeai.Chat;
 import com.google.ai.client.generativeai.GenerativeModel;
@@ -60,7 +58,6 @@ public class GeminiChatManager {
         );
         startChat();
     }
-
     /**
      * Returns the singleton instance of {@code GeminiChatManager}.
      *
@@ -72,7 +69,6 @@ public class GeminiChatManager {
         }
         return instance;
     }
-
     /**
      * Sends a chat message to the Gemini model and receives a text response.
      *

@@ -24,6 +24,9 @@
             android:name=".activities.WebViewActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.SleepHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.FullPlanActivity"
             android:exported="false" />
         <activity

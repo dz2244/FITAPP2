@@ -39,12 +39,12 @@ public class FragmentsActivity extends AppCompatActivity {
             Fragment fragment = null;
             int itemId = item.getItemId();
             
-            if (itemId == R.id.navigation_calorie_tracking) {
+            if (itemId == R.id.navigation_training) {
+                fragment = new TrainingFragment();
+            } else if (itemId == R.id.navigation_calorie_tracking) {
                 fragment = new CalorieTrackingFragment();
             } else if (itemId == R.id.navigation_sleep_tracking) {
                 fragment = new SleepTrackingFragment();
-            } else if (itemId == R.id.navigation_training) {
-                fragment = new TrainingFragment();
             } else if (itemId == R.id.navigation_knowledge) {
                 fragment = new KnowledgeFragment();
             } else if (itemId == R.id.navigation_logout) {
@@ -57,7 +57,8 @@ public class FragmentsActivity extends AppCompatActivity {
 
         // Load the default fragment only if this is the first time the activity is created
         if (savedInstanceState == null) {
-            loadFragment(new CalorieTrackingFragment());
+            loadFragment(new TrainingFragment());
+            bottomNavigationView.setSelectedItemId(R.id.navigation_training);
         }
     }
 

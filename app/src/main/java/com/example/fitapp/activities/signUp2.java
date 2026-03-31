@@ -67,24 +67,34 @@ public class signUp2 extends AppCompatActivity {
             return;
         }
 
-        int age = Integer.parseInt(ageStr);
-        double height = Double.parseDouble(heightStr);
-        double weight = Double.parseDouble(weightStr);
-        
-        // true for male, false for female
-        boolean gender = (genderGroup.getCheckedRadioButtonId() == R.id.maleBtn);
+        try {
+            int age = Integer.parseInt(ageStr);
+            double height = Double.parseDouble(heightStr);
+            double weight = Double.parseDouble(weightStr);
 
-        String userId = refAuth.getCurrentUser().getUid();
-        
-        User user = new User(userId, username, age, gender, height, weight, new HashMap<>(), 0, new HashMap<>(), 0);
-        
-        refUsers.child(userId).setValue(user).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Intent si = new Intent(signUp2.this, signUp3.class);
-                startActivity(si);
-            } else {
-                Toast.makeText(signUp2.this, "Failed to save user info", Toast.LENGTH_SHORT).show();
+            // Normalize height: if the user enters height in centimeters (e.g., 175),
+            // convert it to meters (1.75) to match the expected format in the User class.
+            if (height > 3) {
+                height /= 100;
             }
-        });
+
+            // true for male, false for female
+            boolean gender = (genderGroup.getCheckedRadioButtonId() == R.id.maleBtn);
+
+            String userId = refAuth.getCurrentUser().getUid();
+            
+            User user = new User(userId, username, age, gender, height, weight, new HashMap<>(), 0, new HashMap<>(), 0);
+            
+            refUsers.child(userId).setValue(user).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Intent si = new Intent(signUp2.this, signUp3.class);
+                    startActivity(si);
+                } else {
+                    Toast.makeText(signUp2.this, "Failed to save user info", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Please enter valid numbers", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.fitapp.activities;
+package com.example.fitapp.classes;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitapp.R;
-import com.example.fitapp.classes.ContentArticle;
+import com.example.fitapp.activities.WebViewActivity;
 
 import java.util.List;
 

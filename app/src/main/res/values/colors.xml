@@ -2,4 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Sleep Theme Colors -->
+    <color name="sleep_primary">#1A1C3D</color>
+    <color name="sleep_secondary">#2E3159</color>
+    <color name="sleep_accent">#7C83FD</color>
+    <color name="sleep_text_primary">#FFFFFF</color>
+    <color name="sleep_text_secondary">#B0B0C0</color>
+    <color name="sleep_background">#0F1021</color>
+    <color name="sleep_card_bg">#1E203E</color>
 </resources>

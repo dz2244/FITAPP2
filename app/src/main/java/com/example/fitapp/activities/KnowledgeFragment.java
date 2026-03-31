@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitapp.R;
+import com.example.fitapp.classes.ArticlesAdapter;
 import com.example.fitapp.classes.ContentArticle;
 
 import java.util.ArrayList;

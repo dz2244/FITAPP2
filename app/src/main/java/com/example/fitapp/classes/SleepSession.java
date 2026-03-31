@@ -10,6 +10,8 @@ public class SleepSession {
     private String date;
     /** Total sleep duration in hours. */
     private double sleepTime;
+    /** Indicates if the user woke up in the middle of the night. */
+    private boolean wokeUpInMiddle;
 
     /**
      * Default constructor for Firebase.
@@ -22,11 +24,13 @@ public class SleepSession {
      * @param sessionId Session unique ID.
      * @param date Date of sleep.
      * @param sleepTime Duration in hours.
+     * @param wokeUpInMiddle Whether the user woke up.
      */
-    public SleepSession(String sessionId, String date, double sleepTime) {
+    public SleepSession(String sessionId, String date, double sleepTime, boolean wokeUpInMiddle) {
         this.sessionId = sessionId;
         this.date = date;
         this.sleepTime = sleepTime;
+        this.wokeUpInMiddle = wokeUpInMiddle;
     }
 
     /** @return Session ID. */
@@ -43,4 +47,9 @@ public class SleepSession {
     public double getSleepTime() { return sleepTime; }
     /** @param sleepTime Hours to set. */
     public void setSleepTime(double sleepTime) { this.sleepTime = sleepTime; }
+
+    /** @return Whether the user woke up. */
+    public boolean isWokeUpInMiddle() { return wokeUpInMiddle; }
+    /** @param wokeUpInMiddle The status to set. */
+    public void setWokeUpInMiddle(boolean wokeUpInMiddle) { this.wokeUpInMiddle = wokeUpInMiddle; }
 }

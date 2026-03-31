@@ -32,13 +32,13 @@
             android:textColor="#6B7280"
             android:textSize="16sp" />
 
-        <!-- AI Scan Button -->
+        <!-- AI Scan Button (Changed to Black) -->
         <Button
             android:id="@+id/scanFoodBtn"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="24dp"
-            android:backgroundTint="#4F46E5"
+            android:backgroundTint="@android:color/black"
             android:text="Scan Food with AI"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
