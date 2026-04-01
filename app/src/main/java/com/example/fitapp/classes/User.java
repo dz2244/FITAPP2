@@ -7,29 +7,17 @@ import java.util.Map;
  * Stores personal biometrics, preferences, goals, and targets.
  */
 public class User {
-    /** Unique user identifier from Firebase Auth. */
     private String userId;
-    /** The user's chosen name. */
     private String username;
-    /** The user's age. */
     private int age;
-    /** User's gender (true for male, false for female). */
     private boolean gender;
-    /** User's height in meters. */
     private double height;
-    /** User's weight in kilograms. */
     private double weight;
-    /** Map representing the user's experience level. */
     private Map<String, Integer> experienceLevel;
-    /** Target number of workouts per week. */
     private int workoutsPerWeek;
-    /** Map of the user's fitness goals. */
     private Map<String, Integer> goals;
-    /** Daily target calorie intake. */
     private int dailyTargetCalories;
-    /** The date the user joined (registration date). */
     private long registrationDate;
-    /** ID of the current workout program. */
     private String currentProgramId;
 
     /**

@@ -7,19 +7,12 @@ import android.graphics.Bitmap;
  * Tracks nutritional information like calories, proteins, carbs, and fats.
  */
 public class MealEntry {
-    /** Unique identifier for the meal entry. */
     private String mealId;
-    /** Short description of the meal. */
     private String description;
-    /** Total calories in the meal. */
     private int calories;
-    /** Amount of protein in grams. */
     private double proteinGrams;
-    /** Amount of carbohydrates in grams. */
     private double carbsGrams;
-    /** Amount of fat in grams. */
     private double fatGrams;
-    /** Image of the meal (optional). */
     private Bitmap image;
 
     /**

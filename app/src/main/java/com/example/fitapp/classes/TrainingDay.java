@@ -8,15 +8,10 @@ import java.util.ArrayList;
  * Contains information about workouts completed, estimated time, and specific exercises.
  */
 public class TrainingDay implements Serializable {
-    /** The date of the training day in String format. */
     private String date;
-    /** The number of workouts completed on this day. */
     private int workoutsCompletedToday;
-    /** The estimated duration of the workout in minutes. */
     private int estimatedtime;
-    /** Indicates whether the training session for this day is completed. */
     private boolean isCompleted;
-    /** List of exercises scheduled for this training day. */
     private ArrayList<Exercise> exercises;
 
     /**

@@ -4,13 +4,9 @@ package com.example.fitapp.classes;
  * Represents a logged sleep session.
  */
 public class SleepSession {
-    /** Unique identifier for the sleep session. */
     private String sessionId;
-    /** Date of the sleep session. */
     private String date;
-    /** Total sleep duration in hours. */
     private double sleepTime;
-    /** Indicates if the user woke up in the middle of the night. */
     private boolean wokeUpInMiddle;
 
     /**

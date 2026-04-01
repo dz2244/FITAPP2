@@ -10,8 +10,18 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.fitapp.R;
 
+/**
+ * Activity that displays a web page within the app using a {@link WebView}.
+ * It receives the target URL and an optional title via Intent extras.
+ */
 public class WebViewActivity extends AppCompatActivity {
 
+    /**
+     * Initializes the activity, sets up the toolbar with a back button,
+     * and configures the WebView to load the provided URL.
+     *
+     * @param savedInstanceState Bundle containing activity state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +38,7 @@ public class WebViewActivity extends AppCompatActivity {
         String url = getIntent().getStringExtra("url");
         String title = getIntent().getStringExtra("title");
 
-        if (title != null) {
+        if (title != null && getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
         }
 

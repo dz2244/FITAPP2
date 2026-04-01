@@ -55,17 +55,23 @@ public class signUp3 extends AppCompatActivity {
     private RadioGroup experienceGroup;
     /** RadioGroup for workouts per week selection. */
     private RadioGroup workoutsGroup;
-    /** Currently selected fitness goal. */
+    /** Currently selected fitness goal (e.g., "Fat Loss", "Muscle Gain"). */
     private String selectedGoal = "";
-    /** Button for fat loss goal. */
+    /** Button for fat loss goal selection. */
     private ImageButton fatLossBtn;
-    /** Button for muscle gain goal. */
+    /** Button for muscle gain goal selection. */
     private ImageButton muscleBtn;
-    /** Button for general health goal. */
+    /** Button for general health goal selection. */
     private ImageButton healthBtn;
 
-    private Executor executor = Executors.newSingleThreadExecutor();
+    /** Single-thread executor for handling background tasks like AI processing. */
+    private final Executor executor = Executors.newSingleThreadExecutor();
 
+    /**
+     * Initializes the activity and sets up button click listeners.
+     *
+     * @param savedInstanceState Bundle containing activity state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +88,12 @@ public class signUp3 extends AppCompatActivity {
         healthBtn.setOnClickListener(v -> selectGoal("General Health", healthBtn));
     }
 
+    /**
+     * Updates the UI to reflect the selected fitness goal.
+     *
+     * @param goal        The goal name.
+     * @param selectedBtn The button that was clicked.
+     */
     private void selectGoal(String goal, ImageButton selectedBtn) {
         selectedGoal = goal;
         fatLossBtn.setBackgroundColor(Color.WHITE);
@@ -90,6 +102,12 @@ public class signUp3 extends AppCompatActivity {
         selectedBtn.setBackgroundColor(Color.LTGRAY);
     }
 
+    /**
+     * Handles the "Get Started" button click. Finalizes user data collection,
+     * updates Firebase, and triggers AI workout generation.
+     *
+     * @param view The clicked view.
+     */
     public void clickedGetStartedBtn(View view) {
         int expId = experienceGroup.getCheckedRadioButtonId();
         int workId = workoutsGroup.getCheckedRadioButtonId();
@@ -153,6 +171,11 @@ public class signUp3 extends AppCompatActivity {
         });
     }
 
+    /**
+     * Generates a personalized workout program using Vertex AI based on the user's profile.
+     *
+     * @param user The user for whom to generate the program.
+     */
     private void generateAndSaveAIWorkout(User user) {
         GenerativeModel gm = FirebaseVertexAI.getInstance()
                 .generativeModel("gemini-1.5-flash");
@@ -208,6 +231,13 @@ public class signUp3 extends AppCompatActivity {
         }, executor);
     }
 
+    /**
+     * Parses the AI-generated response and saves the workout program to Firebase.
+     *
+     * @param userId The ID of the user.
+     * @param aiText The raw response text from the AI.
+     * @param user   The user object.
+     */
     private void saveProgramToFirebase(String userId, String aiText, User user) {
         try {
             String jsonStr = aiText.trim();
@@ -252,6 +282,12 @@ public class signUp3 extends AppCompatActivity {
         }
     }
 
+    /**
+     * Saves a fallback basic workout program if AI generation fails.
+     *
+     * @param userId The ID of the user.
+     * @param user   The user object.
+     */
     private void saveBasicProgramToFirebase(String userId, User user) {
         String programId = refWorkoutPrograms.push().getKey();
         ArrayList<TrainingDay> defaultDays = new ArrayList<>();
@@ -326,11 +362,25 @@ public class signUp3 extends AppCompatActivity {
     private ArrayList<Exercise> getLegs() { return getLowerA(); }
     private ArrayList<Exercise> getFullBody() { return getUpperA(); }
 
+    /**
+     * Calculates the Basal Metabolic Rate (BMR) for the user.
+     *
+     * @param user The user object.
+     * @return Calculated BMR.
+     */
     public double calculateBMR(User user) {
         double h = user.getHeight() * 100;
         return user.isGender() ? 88.362 + (13.397 * user.getWeight()) + (4.799 * h) - (5.677 * user.getAge()) : 447.593 + (9.247 * user.getWeight()) + (3.098 * h) - (4.330 * user.getAge());
     }
 
+    /**
+     * Calculates the daily target calories based on BMR, activity level, and goals.
+     *
+     * @param user The user object.
+     * @param f    Frequency of workouts per week.
+     * @param g    Fitness goal ("Fat Loss", "Muscle Gain", etc.).
+     * @return Calculated target calories.
+     */
     public int calculateCalories(User user, int f, String g) {
         double tdee = calculateBMR(user) * (1.2 + f * 0.1);
         if (g.equalsIgnoreCase("Fat Loss")) tdee -= 500;

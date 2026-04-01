@@ -17,16 +17,33 @@ import com.example.fitapp.activities.WebViewActivity;
 
 import java.util.List;
 
-public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ArticleViewHolder> {
+/**
+ * RecyclerView Adapter for displaying articles and video items in the Knowledge section.
+ * It manages a list of {@link videos} objects and binds them to the UI components.
+ */
+public class VidAdapter extends RecyclerView.Adapter<VidAdapter.ArticleViewHolder> {
 
-    private List<ContentArticle> articles;
-    private Context context;
+    private final List<videos> articles;
+    private final Context context;
 
-    public ArticlesAdapter(List<ContentArticle> articles, Context context) {
+    /**
+     * Constructor for VidAdapter.
+     *
+     * @param articles List of video/article data.
+     * @param context  The current context.
+     */
+    public VidAdapter(List<videos> articles, Context context) {
         this.articles = articles;
         this.context = context;
     }
 
+    /**
+     * Inflates the item layout and creates a new {@link ArticleViewHolder}.
+     *
+     * @param parent   The parent ViewGroup.
+     * @param viewType The view type of the new View.
+     * @return A new ArticleViewHolder instance.
+     */
     @NonNull
     @Override
     public ArticleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,9 +51,15 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         return new ArticleViewHolder(view);
     }
 
+    /**
+     * Binds the article data to the ViewHolder and sets up the click listener for viewing content.
+     *
+     * @param holder   The ViewHolder to update.
+     * @param position The position of the item in the data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull ArticleViewHolder holder, int position) {
-        ContentArticle article = articles.get(position);
+        videos article = articles.get(position);
         holder.tvTitle.setText(article.getTitle());
         
         StringBuilder categories = new StringBuilder();
@@ -65,15 +88,30 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
         });
     }
 
+    /**
+     * Returns the total number of items in the articles list.
+     *
+     * @return The number of items.
+     */
     @Override
     public int getItemCount() {
         return articles.size();
     }
 
+    /**
+     * ViewHolder for an article/video item, holding references to the UI components.
+     */
     static class ArticleViewHolder extends RecyclerView.ViewHolder {
+        /** TextViews for article title, category, and snippet. */
         TextView tvTitle, tvCategory, tvSnippet;
+        /** Button to view the content (video or more text). */
         Button btnViewContent;
 
+        /**
+         * Constructor for ArticleViewHolder.
+         *
+         * @param itemView The view of the article item.
+         */
         public ArticleViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvArticleTitle);

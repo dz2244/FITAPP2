@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitapp.R;
-import com.example.fitapp.classes.ArticlesAdapter;
-import com.example.fitapp.classes.ContentArticle;
+import com.example.fitapp.classes.VidAdapter;
+import com.example.fitapp.classes.videos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,8 +27,8 @@ import java.util.Map;
 public class KnowledgeFragment extends Fragment {
 
     private RecyclerView rvArticles;
-    private ArticlesAdapter adapter;
-    private List<ContentArticle> articleList;
+    private VidAdapter adapter;
+    private List<videos> articleList;
 
     public KnowledgeFragment() {
         // Required empty public constructor
@@ -44,7 +44,7 @@ public class KnowledgeFragment extends Fragment {
         
         loadArticles();
         
-        adapter = new ArticlesAdapter(articleList, getContext());
+        adapter = new VidAdapter(articleList, getContext());
         rvArticles.setAdapter(adapter);
         
         return view;
@@ -57,7 +57,7 @@ public class KnowledgeFragment extends Fragment {
         Map<String, Integer> cat1 = new HashMap<>();
         cat1.put("Training", 1);
         cat1.put("Form", 1);
-        articleList.add(new ContentArticle(
+        articleList.add(new videos(
                 "1",
                 "Mastering Squat Form",
                 cat1,
@@ -69,7 +69,7 @@ public class KnowledgeFragment extends Fragment {
         Map<String, Integer> catDL = new HashMap<>();
         catDL.put("Training", 1);
         catDL.put("Form", 1);
-        articleList.add(new ContentArticle(
+        articleList.add(new videos(
                 "2",
                 "How to Deadlift Safely",
                 catDL,
@@ -80,7 +80,7 @@ public class KnowledgeFragment extends Fragment {
         // 3. Nutrition: Protein
         Map<String, Integer> cat2 = new HashMap<>();
         cat2.put("Nutrition", 1);
-        articleList.add(new ContentArticle(
+        articleList.add(new videos(
                 "3",
                 "Protein: The Building Block",
                 cat2,
@@ -92,7 +92,7 @@ public class KnowledgeFragment extends Fragment {
         Map<String, Integer> catPO = new HashMap<>();
         catPO.put("Principles", 1);
         catPO.put("Growth", 1);
-        articleList.add(new ContentArticle(
+        articleList.add(new videos(
                 "4",
                 "What is Progressive Overload?",
                 catPO,
@@ -103,7 +103,7 @@ public class KnowledgeFragment extends Fragment {
         // 5. Sleep & Recovery
         Map<String, Integer> cat3 = new HashMap<>();
         cat3.put("Recovery", 1);
-        articleList.add(new ContentArticle(
+        articleList.add(new videos(
                 "5",
                 "Recovery: When the Magic Happens",
                 cat3,
@@ -114,7 +114,7 @@ public class KnowledgeFragment extends Fragment {
         // 6. Gym Etiquette
         Map<String, Integer> catEt = new HashMap<>();
         catEt.put("General", 1);
-        articleList.add(new ContentArticle(
+        articleList.add(new videos(
                 "6",
                 "Gym Etiquette for Beginners",
                 catEt,
@@ -126,7 +126,7 @@ public class KnowledgeFragment extends Fragment {
         Map<String, Integer> catBr = new HashMap<>();
         catBr.put("Training", 1);
         catBr.put("Form", 1);
-        articleList.add(new ContentArticle(
+        articleList.add(new videos(
                 "7",
                 "Breathing During Lifts",
                 catBr,
@@ -138,7 +138,7 @@ public class KnowledgeFragment extends Fragment {
         Map<String, Integer> catWu = new HashMap<>();
         catWu.put("Training", 1);
         catWu.put("Safety", 1);
-        articleList.add(new ContentArticle(
+        articleList.add(new videos(
                 "8",
                 "The Ultimate Warm-up Routine",
                 catWu,

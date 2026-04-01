@@ -7,11 +7,8 @@ import java.util.ArrayList;
  * Tracks the individual training days and total workouts performed.
  */
 public class TrainingWeek {
-    /** Unique identifier for the training week. */
     private String weekId;
-    /** List of training days within this week. */
     private ArrayList<TrainingDay> trainingDays;
-    /** Total number of workouts performed during this week. */
     private int workoutsThisWeek;
 
     /**

@@ -8,18 +8,11 @@ import java.util.Map;
  * Contains information about the program's level and scheduled training weeks.
  */
 public class WorkoutProgram {
-    /** Unique identifier for the program. */
     private String programId;
-    /** The name of the workout program. */
     private String name;
-    /** Map representing the difficulty level of the program. */
     private Map<String, Integer> level;
-    /** List of training weeks in this program. */
     private ArrayList<TrainingWeek> weeks;
 
-    /**
-     * Default constructor for Firebase serialization.
-     */
     public WorkoutProgram() {
     }
 
@@ -37,13 +30,10 @@ public class WorkoutProgram {
         this.weeks = weeks;
     }
 
-    /**
-     * @return The unique program ID.
-     */
+
     public String getProgramId() {
         return programId;
     }
-
     /**
      * @param programId The program ID to set.
      */

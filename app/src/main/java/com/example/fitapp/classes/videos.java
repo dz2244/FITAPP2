@@ -6,22 +6,17 @@ import java.util.Map;
  * Represents a content article or tip in the application.
  * Articles can belong to categories like training, nutrition, or rest.
  */
-public class ContentArticle {
-    /** Unique identifier for the article. */
+public class videos {
     private String articleId;
-    /** The title of the article or tip. */
     private String title;
-    /** Map representing the category of the article (e.g., training, nutrition, rest). */
     private Map<String, Integer> category;
-    /** The main text content of the article. */
     private String bodyText;
-    /** Optional URL to a video related to the article. */
     private String videoUrl;
 
     /**
      * Default constructor for Firebase serialization.
      */
-    public ContentArticle() {
+    public videos() {
     }
 
     /**
@@ -32,7 +27,7 @@ public class ContentArticle {
      * @param bodyText The main text of the article.
      * @param videoUrl The URL for an associated video.
      */
-    public ContentArticle(String articleId, String title, Map<String, Integer> category, String bodyText, String videoUrl) {
+    public videos(String articleId, String title, Map<String, Integer> category, String bodyText, String videoUrl) {
         this.articleId = articleId;
         this.title = title;
         this.category = category;

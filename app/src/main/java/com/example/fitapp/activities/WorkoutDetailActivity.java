@@ -19,23 +19,30 @@ import java.util.List;
 
 /**
  * Activity that displays the detailed list of exercises for a specific workout.
- * It receives workout data via Intent extras.
+ * It receives workout data (name and list of exercises) via Intent extras.
+ * If no data is provided via the intent, it falls back to loading mock exercises.
  */
 public class WorkoutDetailActivity extends AppCompatActivity {
 
     /** TextView displaying the name of the workout. */
     private TextView tvWorkoutName;
+
     /** TextView for additional workout information (optional). */
     private TextView tvWorkoutInfo;
+
     /** RecyclerView to display the list of exercises. */
     private RecyclerView recyclerExercises;
+
     /** Adapter for the exercises RecyclerView. */
     private ExerciseAdapter adapter;
-    /** List of exercises to be displayed. */
+
+    /** List of exercises to be displayed in the RecyclerView. */
     private List<Exercise> exerciseList = new ArrayList<>();
 
     /**
      * Initializes the activity, sets the content view, and populates the exercise list.
+     * Extracts workout data from intent extras and sets up the RecyclerView.
+     *
      * @param savedInstanceState Bundle containing activity state.
      */
     @Override
@@ -66,7 +73,7 @@ public class WorkoutDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Loads a set of mock exercises for demonstration purposes when no data is passed.
+     * Loads a set of mock exercises for demonstration purposes when no data is passed via intent.
      */
     private void loadMockExercises() {
         exerciseList.add(new Exercise("Bench Press", 4, 10, 90));
@@ -77,20 +84,28 @@ public class WorkoutDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * RecyclerView Adapter for displaying individual exercises.
+     * RecyclerView Adapter for displaying individual {@link Exercise} items.
      */
     private static class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ExerciseViewHolder> {
-        /** The list of exercises. */
+        /** The list of exercises to be managed by this adapter. */
         private List<Exercise> exercises;
 
         /**
          * Constructor for ExerciseAdapter.
+         *
          * @param exercises The list of exercises to display.
          */
         ExerciseAdapter(List<Exercise> exercises) {
             this.exercises = exercises;
         }
 
+        /**
+         * Inflates the item layout and creates a new {@link ExerciseViewHolder}.
+         *
+         * @param parent   The parent ViewGroup.
+         * @param viewType The view type of the new View.
+         * @return A new ExerciseViewHolder instance.
+         */
         @NonNull
         @Override
         public ExerciseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -98,6 +113,12 @@ public class WorkoutDetailActivity extends AppCompatActivity {
             return new ExerciseViewHolder(view);
         }
 
+        /**
+         * Binds the exercise data at the given position to the ViewHolder.
+         *
+         * @param holder   The ViewHolder to update.
+         * @param position The position of the item in the data set.
+         */
         @Override
         public void onBindViewHolder(@NonNull ExerciseViewHolder holder, int position) {
             Exercise ex = exercises.get(position);
@@ -106,20 +127,30 @@ public class WorkoutDetailActivity extends AppCompatActivity {
             holder.tvRest.setText(ex.getRestTime() + "s Rest");
         }
 
+        /**
+         * Returns the total number of items in the exercises list.
+         *
+         * @return The number of exercises.
+         */
         @Override
         public int getItemCount() {
             return exercises.size();
         }
 
         /**
-         * ViewHolder for an exercise item.
+         * ViewHolder for an exercise item, holding references to the UI components.
          */
         static class ExerciseViewHolder extends RecyclerView.ViewHolder {
-            /** TextViews for exercise name, sets/reps details, and rest time. */
-            TextView tvName, tvDetails, tvRest;
+            /** TextView for the name of the exercise. */
+            TextView tvName;
+            /** TextView for the sets and reps details. */
+            TextView tvDetails;
+            /** TextView for the rest time duration. */
+            TextView tvRest;
 
             /**
              * Constructor for ExerciseViewHolder.
+             *
              * @param itemView The view of the exercise item.
              */
             ExerciseViewHolder(View itemView) {

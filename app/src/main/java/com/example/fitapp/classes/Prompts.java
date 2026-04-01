@@ -1,6 +1,14 @@
 package com.example.fitapp.classes;
 
+/**
+ * Class containing static string constants for AI prompts and JSON schemas.
+ * These are used when interacting with the Gemini AI model for tasks like meal analysis.
+ */
 public class Prompts {
+    /**
+     * JSON schema definition for dish ingredients.
+     * This schema defines the structure for ingredient name, quantity, unit, and nutritional values.
+     */
     public static final String INGREDIENTS_SCHEMA = "{\n" +
             "  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n" +
             "  \"title\": \"Dish Ingredients\",\n" +
@@ -84,6 +92,10 @@ public class Prompts {
             "  }\n" +
             "}";
 
+    /**
+     * AI prompt for analyzing food photos.
+     * Requests nutritional data based on photos and specifies the return format using {@link #INGREDIENTS_SCHEMA}.
+     */
     public static final String PHOTOS_PROMPT = "based on the photos write me the amount of carbs, proteins, fats and calories in the dish.\n" +
             "If you can't find any food in the photos, please ask me to take a better photo."+
             "return the data in the given schema:" + INGREDIENTS_SCHEMA;

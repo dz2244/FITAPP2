@@ -29,12 +29,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Activity that displays the user's sleep history organized by weeks.
+ * It fetches sleep sessions from Firebase Realtime Database and aggregates them into weekly data.
+ */
 public class SleepHistoryActivity extends AppCompatActivity {
 
+    /** RecyclerView to display the list of weekly sleep data. */
     private RecyclerView recyclerSleepWeeks;
+    /** Adapter for the sleep weeks RecyclerView. */
     private SleepWeekAdapter adapter;
-    private List<SleepWeekData> sleepWeeks = new ArrayList<>();
+    /** List of sleep week data to be displayed. */
+    private final List<SleepWeekData> sleepWeeks = new ArrayList<>();
 
+    /**
+     * Initializes the activity, sets up the RecyclerView and back button.
+     * Triggers the fetching of sleep sessions from Firebase.
+     *
+     * @param savedInstanceState Bundle containing activity state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +63,9 @@ public class SleepHistoryActivity extends AppCompatActivity {
         fetchSleepSessions();
     }
 
+    /**
+     * Fetches sleep sessions for the currently authenticated user from Firebase Realtime Database.
+     */
     private void fetchSleepSessions() {
         FirebaseUser user = FBRef.refAuth.getCurrentUser();
         if (user == null) return;
@@ -70,6 +86,11 @@ public class SleepHistoryActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Processes individual sleep sessions into weekly aggregates.
+     *
+     * @param sessions The list of raw sleep sessions fetched from the database.
+     */
     private void processSessionsIntoWeeks(List<SleepSession> sessions) {
         sleepWeeks.clear();
         for (int i = 0; i < 12; i++) {
@@ -77,7 +98,6 @@ public class SleepHistoryActivity extends AppCompatActivity {
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Calendar cal = Calendar.getInstance();
         
         // Find the registration date to align weeks, or just use the earliest session
         long baseTime = System.currentTimeMillis();
@@ -108,32 +128,69 @@ public class SleepHistoryActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Helper class to store aggregated sleep data for a single week.
+     */
     private static class SleepWeekData {
+        /** The week number (e.g., 1, 2, ...). */
         int weekNumber;
+        /** Number of days in this week that have sleep logs. */
         int daysTracked = 0;
+        /** Total hours of sleep logged in this week. */
         double totalHours = 0;
 
+        /**
+         * Constructor for SleepWeekData.
+         *
+         * @param weekNumber The number of the week.
+         */
         SleepWeekData(int weekNumber) {
             this.weekNumber = weekNumber;
         }
 
+        /**
+         * Adds a sleep session's duration to the weekly totals.
+         *
+         * @param hours The number of hours slept in a session.
+         */
         void addSession(double hours) {
             daysTracked++;
             totalHours += hours;
         }
 
+        /**
+         * Calculates the average sleep hours for the days tracked in this week.
+         *
+         * @return Average sleep hours.
+         */
         double getAvgHours() {
             return daysTracked == 0 ? 0 : totalHours / daysTracked;
         }
     }
 
+    /**
+     * RecyclerView Adapter for displaying {@link SleepWeekData} items.
+     */
     private static class SleepWeekAdapter extends RecyclerView.Adapter<SleepWeekAdapter.ViewHolder> {
-        private List<SleepWeekData> data;
+        /** The list of weekly sleep data to be displayed. */
+        private final List<SleepWeekData> data;
 
+        /**
+         * Constructor for SleepWeekAdapter.
+         *
+         * @param data The list of weekly sleep data.
+         */
         SleepWeekAdapter(List<SleepWeekData> data) {
             this.data = data;
         }
 
+        /**
+         * Inflates the item layout and creates a new {@link ViewHolder}.
+         *
+         * @param parent   The parent ViewGroup.
+         * @param viewType The view type of the new View.
+         * @return A new ViewHolder instance.
+         */
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -141,6 +198,12 @@ public class SleepHistoryActivity extends AppCompatActivity {
             return new ViewHolder(view);
         }
 
+        /**
+         * Binds the weekly sleep data to the ViewHolder and updates UI elements.
+         *
+         * @param holder   The ViewHolder to update.
+         * @param position The position of the item in the data set.
+         */
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             SleepWeekData week = data.get(position);
@@ -152,15 +215,30 @@ public class SleepHistoryActivity extends AppCompatActivity {
             holder.pbProgress.setProgress(progress);
         }
 
+        /**
+         * Returns the total number of items in the data set.
+         *
+         * @return The number of weekly data entries.
+         */
         @Override
         public int getItemCount() {
             return data.size();
         }
 
+        /**
+         * ViewHolder for a sleep week item, holding references to the UI components.
+         */
         static class ViewHolder extends RecyclerView.ViewHolder {
+            /** TextViews for week number, tracking status, and average sleep. */
             TextView tvWeekNumber, tvStatus, tvAvg;
+            /** ProgressBar showing the portion of the week tracked. */
             ProgressBar pbProgress;
 
+            /**
+             * Constructor for ViewHolder.
+             *
+             * @param itemView The view of the sleep week item.
+             */
             ViewHolder(View itemView) {
                 super(itemView);
                 tvWeekNumber = itemView.findViewById(R.id.tvSleepWeekNumber);
