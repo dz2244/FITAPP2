@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FITAPP">
         <activity
+            android:name=".activities.Credits"
+            android:exported="false" />
+        <activity
             android:name=".activities.WebViewActivity"
             android:exported="false" />
         <activity

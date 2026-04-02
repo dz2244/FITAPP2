@@ -5,6 +5,7 @@ import static com.example.fitapp.classes.FBRef.refAuth;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -32,6 +33,12 @@ public class FragmentsActivity extends AppCompatActivity {
             return insets;
         });
 
+        Button btnCredits = findViewById(R.id.btn_credits);
+        btnCredits.setOnClickListener(v -> {
+            Intent intent = new Intent(FragmentsActivity.this, Credits.class);
+            startActivity(intent);
+        });
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         
         // Use the modern OnItemSelectedListener instead of the deprecated one
@@ -47,10 +54,13 @@ public class FragmentsActivity extends AppCompatActivity {
                 fragment = new SleepTrackingFragment();
             } else if (itemId == R.id.navigation_knowledge) {
                 fragment = new KnowledgeFragment();
-            } else if (itemId == R.id.navigation_logout) {
+            }
+            /* 
+            else if (itemId == R.id.navigation_logout) {
                 logout();
                 return true;
             }
+            */
 
             return loadFragment(fragment);
         });
@@ -81,6 +91,7 @@ public class FragmentsActivity extends AppCompatActivity {
      * Signs out the user from Firebase, clears "Remember Me" preference,
      * and redirects to the Login screen.
      */
+    /*
     private void logout() {
         refAuth.signOut();
         SharedPreferences settings = getSharedPreferences("RemeberMe", MODE_PRIVATE);
@@ -93,4 +104,5 @@ public class FragmentsActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+    */
 }
