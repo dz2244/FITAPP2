@@ -67,6 +67,11 @@ public class signUp2 extends AppCompatActivity {
             return;
         }
 
+        if (genderGroup.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(this, "Please select a gender", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         try {
             int age = Integer.parseInt(ageStr);
             double height = Double.parseDouble(heightStr);
@@ -76,6 +81,22 @@ public class signUp2 extends AppCompatActivity {
             // convert it to meters (1.75) to match the expected format in the User class.
             if (height > 3) {
                 height /= 100;
+            }
+
+            // Validation for unrealistic information
+            if (age <= 0 || age > 100) {
+                Toast.makeText(this, "Please enter a realistic age (1-100)", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (height <= 0 || height > 2.5) {
+                Toast.makeText(this, "Please enter a realistic height (up to 2.5m)", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (weight <= 0 || weight > 150) {
+                Toast.makeText(this, "Please enter a realistic weight (up to 150kg)", Toast.LENGTH_SHORT).show();
+                return;
             }
 
             // true for male, false for female
