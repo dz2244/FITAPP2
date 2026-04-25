@@ -1,7 +1,10 @@
 package com.example.fitapp.activities;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -83,11 +86,28 @@ public class CalorieTrackingFragment extends Fragment {
         addMealBtn.setOnClickListener(v -> saveMealEntry());
 
         scanFoodBtn.setOnClickListener(v -> {
+            if (isUsingCellular()) {
+                Toast.makeText(getContext(), "Warning: Using cellular data for AI analysis", Toast.LENGTH_SHORT).show();
+            }
             // Launch image picker to select several pictures of food
             selectImagesLauncher.launch("image/*");
         });
 
         return view;
+    }
+
+    /**
+     * Checks if the device is currently using a cellular connection.
+     * @return true if connected via cellular, false otherwise.
+     */
+    private boolean isUsingCellular() {
+        if (getContext() == null) return false;
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+            return capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
+        }
+        return false;
     }
 
     /**
@@ -176,7 +196,7 @@ public class CalorieTrackingFragment extends Fragment {
             foodNameDisplay.setText(foodNames.toString());
             caloriesDisplay.setText(String.valueOf((int) totalCalories));
             proteinDisplay.setText(String.format(Locale.US, "%.1f", totalProtein));
-            carbsDisplay.setText(String.format(Locale.US, "%.1f", totalCarbs));
+            carbsDisplay.setText(String.format(Locale.US, "%.1f", totalFats));
             fatsDisplay.setText(String.format(Locale.US, "%.1f", totalFats));
 
             Toast.makeText(getContext(), "Nutrition details updated!", Toast.LENGTH_SHORT).show();

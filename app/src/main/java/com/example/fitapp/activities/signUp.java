@@ -33,6 +33,8 @@ public class signUp extends AppCompatActivity {
     private EditText eTEmail;
     /** EditText for password input. */
     private EditText eTPass;
+    /** EditText for confirm password input. */
+    private EditText eTConfirmPass;
     /** TextView for displaying messages and error feedback. */
     private TextView tVMsg;
 
@@ -48,6 +50,7 @@ public class signUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         eTEmail = findViewById(R.id.emailInput);
         eTPass = findViewById(R.id.passwordInput);
+        eTConfirmPass = findViewById(R.id.confirm_password_input_signup);
         tVMsg = findViewById(R.id.msg);
     }
 
@@ -57,53 +60,61 @@ public class signUp extends AppCompatActivity {
      * @param view The view that was clicked (the sign-up button).
      */
     public void createUser(View view) {
-        String email = eTEmail.getText().toString();
-        String pass = eTPass.getText().toString();
+        String email = eTEmail.getText().toString().trim();
+        String pass = eTPass.getText().toString().trim();
+        String confirmPass = eTConfirmPass.getText().toString().trim();
 
-        if (email.isEmpty() || pass.isEmpty()) {
-            Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
-        } else {
-            ProgressDialog pd = new ProgressDialog(this);
-            pd.setTitle("Connecting");
-            pd.setMessage("Creating user...");
-            pd.show();
+        if (email.isEmpty() || pass.isEmpty() || confirmPass.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            refAuth.createUserWithEmailAndPassword(email, pass)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            pd.dismiss();
-                            if (isFinishing() || isDestroyed()) {
-                                return;
-                            }
+        if (!pass.equals(confirmPass)) {
+            eTConfirmPass.setError("Passwords do not match");
+            eTConfirmPass.requestFocus();
+            return;
+        }
 
-                            if (task.isSuccessful()) {
-                                Log.i("MainActivity", "createUserWithEmailAndPassword:success");
-                                
-                                Intent intent = new Intent(signUp.this, signUp2.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Exception exp = task.getException();
-                                if (tVMsg != null) {
-                                    if (exp instanceof FirebaseAuthInvalidUserException) {
-                                        tVMsg.setText("Invalid email address.");
-                                    } else if (exp instanceof FirebaseAuthWeakPasswordException) {
-                                        tVMsg.setText("Password too weak.");
-                                    } else if (exp instanceof FirebaseAuthUserCollisionException) {
-                                        tVMsg.setText("User already exists.");
-                                    } else if (exp instanceof FirebaseAuthInvalidCredentialsException) {
-                                        tVMsg.setText("General authentication failure.");
-                                    } else if (exp instanceof FirebaseNetworkException) {
-                                        tVMsg.setText("Network error. Please check your connection.");
-                                    } else {
-                                        tVMsg.setText("An error occurred. Please try again later.");
-                                    }
+        ProgressDialog pd = new ProgressDialog(this);
+        pd.setTitle("Connecting");
+        pd.setMessage("Creating user...");
+        pd.show();
+
+        refAuth.createUserWithEmailAndPassword(email, pass)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        pd.dismiss();
+                        if (isFinishing() || isDestroyed()) {
+                            return;
+                        }
+
+                        if (task.isSuccessful()) {
+                            Log.i("MainActivity", "createUserWithEmailAndPassword:success");
+                            
+                            Intent intent = new Intent(signUp.this, signUp2.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Exception exp = task.getException();
+                            if (tVMsg != null) {
+                                if (exp instanceof FirebaseAuthInvalidUserException) {
+                                    tVMsg.setText("Invalid email address.");
+                                } else if (exp instanceof FirebaseAuthWeakPasswordException) {
+                                    tVMsg.setText("Password too weak.");
+                                } else if (exp instanceof FirebaseAuthUserCollisionException) {
+                                    tVMsg.setText("User already exists.");
+                                } else if (exp instanceof FirebaseAuthInvalidCredentialsException) {
+                                    tVMsg.setText("General authentication failure.");
+                                } else if (exp instanceof FirebaseNetworkException) {
+                                    tVMsg.setText("Network error. Please check your connection.");
+                                } else {
+                                    tVMsg.setText("An error occurred. Please try again later.");
                                 }
                             }
                         }
-                    });
-        }
+                    }
+                });
     }
 
     /**
