@@ -1,12 +1,15 @@
 package com.example.fitapp.activities;
 
-import static com.example.fitapp.classes.FBRef.refAuth;
-
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.widget.Button;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,9 +21,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
  * Main activity that hosts the fragments of the application.
- * Manages fragment transactions based on BottomNavigationView selection.
+ * Manages fragment transactions and monitors network connectivity across all fragments.
  */
 public class FragmentsActivity extends AppCompatActivity {
+
+    private AlertDialog connectivityDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,6 @@ public class FragmentsActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         
-        // Use the modern OnItemSelectedListener instead of the deprecated one
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment fragment = null;
             int itemId = item.getItemId();
@@ -55,28 +59,82 @@ public class FragmentsActivity extends AppCompatActivity {
             } else if (itemId == R.id.navigation_knowledge) {
                 fragment = new KnowledgeFragment();
             }
-            /* 
-            else if (itemId == R.id.navigation_logout) {
-                logout();
-                return true;
-            }
-            */
 
             return loadFragment(fragment);
         });
 
-        // Load the default fragment only if this is the first time the activity is created
         if (savedInstanceState == null) {
             loadFragment(new TrainingFragment());
             bottomNavigationView.setSelectedItemId(R.id.navigation_training);
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Register BroadcastReceiver for connectivity changes
+        registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        checkConnectivity(); // Initial check when activity starts
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Unregister to avoid memory leaks
+        unregisterReceiver(networkReceiver);
+    }
+
     /**
-     * Replaces the current fragment in the container with a new one.
-     * @param fragment The fragment to be loaded.
-     * @return true if the fragment was successfully replaced, false otherwise.
+     * BroadcastReceiver to monitor network connectivity changes.
      */
+    private final BroadcastReceiver networkReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            checkConnectivity();
+        }
+    };
+
+    /**
+     * Checks if the device has an active internet connection.
+     * Shows an AlertDialog if no connection (cellular or Wi-Fi) is detected.
+     */
+    private void checkConnectivity() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isConnected = false;
+
+        if (cm != null) {
+            NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+            if (capabilities != null) {
+                // Check if there's any active internet connection
+                isConnected = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+            }
+        }
+
+        if (!isConnected) {
+            showNoConnectionDialog("No Connection", "No celular connection or internet available. Please check your network settings.");
+        } else {
+            // If connected, hide the dialog if it's currently showing
+            if (connectivityDialog != null && connectivityDialog.isShowing()) {
+                connectivityDialog.dismiss();
+            }
+        }
+    }
+
+    /**
+     * Displays an AlertDialog when there is a connectivity issue.
+     */
+    private void showNoConnectionDialog(String title, String message) {
+        if (connectivityDialog != null && connectivityDialog.isShowing()) return;
+
+        connectivityDialog = new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .setCancelable(false) // User must click OK to acknowledge
+                .create();
+        connectivityDialog.show();
+    }
+
     private boolean loadFragment(Fragment fragment) {
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
@@ -86,23 +144,4 @@ public class FragmentsActivity extends AppCompatActivity {
         }
         return false;
     }
-
-    /**
-     * Signs out the user from Firebase, clears "Remember Me" preference,
-     * and redirects to the Login screen.
-     */
-    /*
-    private void logout() {
-        refAuth.signOut();
-        SharedPreferences settings = getSharedPreferences("RemeberMe", MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("stayConnect", false);
-        editor.apply();
-
-        Intent intent = new Intent(this, Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-    }
-    */
 }

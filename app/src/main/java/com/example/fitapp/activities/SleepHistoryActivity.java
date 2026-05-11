@@ -70,7 +70,9 @@ public class SleepHistoryActivity extends AppCompatActivity {
         FirebaseUser user = FBRef.refAuth.getCurrentUser();
         if (user == null) return;
 
-        FBRef.refSleepSessions.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        // Updated path: UserSleepData/userId/SleepSessions
+        FBRef.FBDB.getReference("UserSleepData").child(user.getUid()).child("SleepSessions")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<SleepSession> sessions = new ArrayList<>();

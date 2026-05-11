@@ -1,7 +1,7 @@
 package com.example.fitapp.activities;
 
 import static com.example.fitapp.classes.FBRef.refAuth;
-import static com.example.fitapp.classes.FBRef.refSleepSessions;
+import static com.example.fitapp.classes.FBRef.FBDB;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -25,6 +25,7 @@ import com.example.fitapp.classes.SleepSession;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -80,7 +81,10 @@ public class SleepTrackingFragment extends Fragment {
         if (refAuth.getCurrentUser() == null) return;
         
         String userId = refAuth.getCurrentUser().getUid();
-        refSleepSessions.child(userId).orderByKey().limitToLast(1).addValueEventListener(new ValueEventListener() {
+        // Path: UserSleepData/userId/SleepSessions
+        DatabaseReference sleepRef = FBDB.getReference("UserSleepData").child(userId).child("SleepSessions");
+        
+        sleepRef.orderByKey().limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -138,8 +142,6 @@ public class SleepTrackingFragment extends Fragment {
         // Step 1: When did you go to bed?
         new TimePickerDialog(getContext(), (view1, hourOfDay, minute) -> {
             sleepStartTime = Calendar.getInstance();
-            // If the time is early (e.g. 10 PM), it's probably for "last night"
-            // If user logs at 8 AM, and says bedtime was 11 PM, it's yesterday's 11 PM.
             if (hourOfDay > 12) {
                 sleepStartTime.add(Calendar.DAY_OF_YEAR, -1);
             }
@@ -154,11 +156,10 @@ public class SleepTrackingFragment extends Fragment {
     private void pickEndTime() {
         // Step 2: When did you wake up?
         new TimePickerDialog(getContext(), (view, hourOfDay, minute) -> {
-            sleepEndTime = Calendar.getInstance(); // Usually "now" or just before
+            sleepEndTime = Calendar.getInstance();
             sleepEndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
             sleepEndTime.set(Calendar.MINUTE, minute);
 
-            // If end time is before start time, it means we crossed midnight
             if (sleepEndTime.before(sleepStartTime)) {
                 sleepEndTime.add(Calendar.DAY_OF_YEAR, 1);
             }
@@ -194,13 +195,15 @@ public class SleepTrackingFragment extends Fragment {
         }
 
         String userId = refAuth.getCurrentUser().getUid();
-        String sessionId = refSleepSessions.child(userId).push().getKey();
+        // Saving under UserSleepData -> userId -> SleepSessions -> sessionId
+        DatabaseReference sessionsRef = FBDB.getReference("UserSleepData").child(userId).child("SleepSessions");
+        String sessionId = sessionsRef.push().getKey();
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(sleepStartTime.getTime());
 
         SleepSession session = new SleepSession(sessionId, date, hours, wokeUpInMiddle);
 
         if (sessionId != null) {
-            refSleepSessions.child(userId).child(sessionId).setValue(session)
+            sessionsRef.child(sessionId).setValue(session)
                     .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Sleep logged!", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to log sleep", Toast.LENGTH_SHORT).show());
         }
